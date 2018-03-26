@@ -14,6 +14,31 @@ public class NBody {
         for (Planet p : planets) {
             p.draw();
         }
+
+        StdDraw.enableDoubleBuffering();
+
+        //main animation loop
+        for (int i = 0; i <= T; i += dT) {
+            double[] xForces = new double[planets.length];
+            double[] yForces = new double[planets.length];
+
+            //calculates new x and y forces for each planet
+            for (int j = 0; j < planets.length; j++) {
+                xForces[j] = planets[j].calcNetForceExertedByX(planets);
+                yForces[j] = planets[j].calcNetForceExertedByY(planets);
+
+                planets[j].update(dT, xForces[j], yForces[j]);
+            }
+
+            StdDraw.picture(0, 0, "images/starfield.jpg");
+
+            for (Planet p : planets) {
+                p.draw();
+            }
+
+            StdDraw.show();
+            StdDraw.pause(10);
+        }
     }
 
     public static double readRadius(String name) {
