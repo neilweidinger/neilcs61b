@@ -6,6 +6,14 @@ public class NBody {
 
         double radius = NBody.readRadius(filename);
         Planet[] planets = NBody.readPlanets(filename);
+
+        StdDraw.setXscale(-1 * radius, radius);
+        StdDraw.setYscale(-1 * radius, radius);
+        StdDraw.picture(0, 0, "images/starfield.jpg");
+
+        for (Planet p : planets) {
+            p.draw();
+        }
     }
 
     public static double readRadius(String name) {
