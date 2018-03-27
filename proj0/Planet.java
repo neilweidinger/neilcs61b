@@ -76,4 +76,12 @@ public class Planet {
     public void draw() {
         StdDraw.picture(this.xxPos, this.yyPos, "images/" + this.imgFileName);
     }
+
+    public static void drawEverything(Planet[] planets) {
+        StdDraw.picture(0, 0, "images/starfield.jpg");
+
+        for (Planet p : planets) {
+            p.draw();
+        }
+    }
 }

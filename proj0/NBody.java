@@ -9,11 +9,7 @@ public class NBody {
 
         StdDraw.setXscale(-1 * radius, radius);
         StdDraw.setYscale(-1 * radius, radius);
-        StdDraw.picture(0, 0, "images/starfield.jpg");
-
-        for (Planet p : planets) {
-            p.draw();
-        }
+        Planet.drawEverything(planets);
 
         StdDraw.enableDoubleBuffering();
 
@@ -30,11 +26,7 @@ public class NBody {
                 planets[j].update(dT, xForces[j], yForces[j]);
             }
 
-            StdDraw.picture(0, 0, "images/starfield.jpg");
-
-            for (Planet p : planets) {
-                p.draw();
-            }
+            Planet.drawEverything(planets);
 
             StdDraw.show();
             StdDraw.pause(10);
