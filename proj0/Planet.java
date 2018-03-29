@@ -72,16 +72,4 @@ public class Planet {
         this.xxPos = this.xxPos + (dt * this.xxVel);
         this.yyPos = this.yyPos + (dt * this.yyVel);
     }
-
-    public void draw() {
-        StdDraw.picture(this.xxPos, this.yyPos, "images/" + this.imgFileName);
-    }
-
-    public static void drawEverything(Planet[] planets) {
-        StdDraw.picture(0, 0, "images/starfield.jpg");
-
-        for (Planet p : planets) {
-            p.draw();
-        }
-    }
 }

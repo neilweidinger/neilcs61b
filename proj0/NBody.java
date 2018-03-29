@@ -9,7 +9,7 @@ public class NBody {
 
         StdDraw.setXscale(-1 * radius, radius);
         StdDraw.setYscale(-1 * radius, radius);
-        Planet.drawEverything(planets);
+        NBody.drawEverything(planets);
 
         StdDraw.enableDoubleBuffering();
 
@@ -26,7 +26,7 @@ public class NBody {
                 planets[j].update(dT, xForces[j], yForces[j]);
             }
 
-            Planet.drawEverything(planets);
+            NBody.drawEverything(planets);
 
             StdDraw.show();
             StdDraw.pause(10);
@@ -38,7 +38,6 @@ public class NBody {
             StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
                           p.xxPos, p.yyPos, p.xxVel, p.yyVel, p.mass, p.imgFileName);
         }
-
     }
 
     public static double readRadius(String name) {
@@ -62,5 +61,13 @@ public class NBody {
         }
 
         return planets;
+    }
+
+    public static void drawEverything(Planet[] planets) {
+        StdDraw.picture(0, 0, "images/starfield.jpg");
+
+        for (Planet p : planets) {
+            StdDraw.picture(p.xxPos, p.yyPos, "images/" + p.imgFileName);
+        }
     }
 }
