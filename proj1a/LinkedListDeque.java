@@ -69,7 +69,9 @@ public class LinkedListDeque<T> {
         System.out.println(printNode(this.sentinel.next, this.sentinel));
     }
 
+    //private helper method
     private String printNode(Node p, Node sentinel) {
+        //basecase: if we have reached sentinel this means we have reached the end of the list
         if (p == sentinel) {
             return "";
         }
@@ -79,6 +81,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeFirst() {
+        //if list is emtpy
         if (this.sentinel.next == this.sentinel) {
             return null;
         }
@@ -91,6 +94,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeLast() {
+        //if list is empty
         if (this.sentinel.prev == this.sentinel) {
             return null;
         }
@@ -107,6 +111,8 @@ public class LinkedListDeque<T> {
     }
 
     private T getNode(Node p, Node sentinel, int index) {
+        //this check is important because if we were to remove it, and the user wants get(0) on an empty list, the method
+        //return sentinel.item which is not what is supposed to occur
         if (p == sentinel) {
             return null;
         }
@@ -129,9 +135,12 @@ public class LinkedListDeque<T> {
     }
 
     private T getNodeRecursive(Node p, Node sentinel, int index) {
+        //this means we have reached the end of the list before the correct index, meaning index is out of bounds and we
+        //return null
         if (p == sentinel) {
             return null;
         }
+        //finally at corret index, return item
         else if (index == 0) {
             return p.item;
         }
