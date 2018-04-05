@@ -1,5 +1,5 @@
-public class AList {
-    private int[] items;
+public class AList<T> {
+    private T[] items;
     private int size;
 
     public static void main(String[] args) {
@@ -18,17 +18,17 @@ public class AList {
     
     //default capacity is 10
     public AList() {
-        this.items = new int[10]; //for this class capacity is always ten
+        this.items = (T []) new Object[10]; //for this class capacity is always ten
         this.size = 0;
     }
 
     //for when you want to instantiate AList with custom capacity
     public AList(int n) {
-        this.items = new int[n]; //for this class capacity is always ten
+        this.items = (T []) new Object[n]; //for this class capacity is always ten
         this.size = 0;
     }
 
-    public void addLast(int x) {
+    public void addLast(T x) {
         if (this.size == this.items.length) {
             this.resize();
         }
@@ -39,16 +39,16 @@ public class AList {
 
     //resizes array by 1.5
     private void resize() {
-        int[] resized = new int[(int)(this.items.length * 1.5)];
+        T[] resized = (T []) new Object[(int)(this.items.length * 1.5)];
         System.arraycopy(items, 0, resized, 0, size);
         this.items = resized;
     }
 
-    public int getLast() {
+    public T getLast() {
         return this.items[size - 1];
     }
 
-    public int get(int i) {
+    public T get(int i) {
         return this.items[i];
     }
 
@@ -56,9 +56,11 @@ public class AList {
         return this.size;
     }
 
-    public int removeLast() {
+    public T removeLast() {
+        T returnItem = getLast();
+        this.items[size - 1] = null;
         size--;
-        return this.getLast(); //don't necessarily have to "delete" element from array, since size keeps track of last element
+        return returnItem;
     }
 
     @Override
