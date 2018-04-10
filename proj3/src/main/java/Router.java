@@ -1,5 +1,7 @@
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class provides a shortestPath method for finding routes between two points
@@ -11,8 +13,15 @@ import java.util.Objects;
  */
 public class Router {
     /**
-     * Return a List of longs representing the shortest path from st to dest,
-     * where the longs are node IDs.
+     * Return a List of longs representing the shortest path from the node
+     * closest to a start location and the node closest to the destination
+     * location.
+     * @param g The graph to use.
+     * @param stlon The longitude of the start location.
+     * @param stlat The latitude of the start location.
+     * @param destlon The longitude of the destination location.
+     * @param destlat The latitude of the destination location.
+     * @return A list of node id's in the order visited on the shortest path.
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
@@ -20,9 +29,12 @@ public class Router {
     }
 
     /**
-     * Given a ROUTE as a list of longs representing graph node IDs on graph G,
-     * return a List of NavigationDirection objects representing the correct travel directions
-     * in the right order.
+     * Create the list of directions corresponding to a route on the graph.
+     * @param g The graph to use.
+     * @param route The route to translate into directions. Each element
+     *              corresponds to a node from the graph in the route.
+     * @return A list of NavigatiionDirection objects corresponding to the input
+     * route.
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
         return null; // FIXME
@@ -73,6 +85,9 @@ public class Router {
         /** The distance along this way I represent. */
         double distance;
 
+        /**
+         * Create a default, anonymous NavigationDirection.
+         */
         public NavigationDirection() {
             this.direction = STRAIGHT;
             this.way = UNKNOWN_ROAD;
@@ -80,7 +95,52 @@ public class Router {
         }
 
         public String toString() {
-            return String.format("%s on %s and continue for %.3f miles.", DIRECTIONS[direction], way, distance);
+            return String.format("%s on %s and continue for %.3f miles.",
+                    DIRECTIONS[direction], way, distance);
+        }
+
+        /**
+         * Takes the string representation of a navigation direction and converts it into
+         * a Navigation Direction object.
+         */
+        public static NavigationDirection fromString(String dirAsString) {
+            String regex = "([a-zA-Z\\s]+) on ([\\w\\s]*) and continue for ([0-9\\.]+) miles\\.";
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(dirAsString);
+            NavigationDirection nd = new NavigationDirection();
+            if (m.matches()) {
+                String direction = m.group(1);
+                if (direction.equals("Start")) {
+                    nd.direction = NavigationDirection.START;
+                } else if (direction.equals("Go straight")) {
+                    nd.direction = NavigationDirection.STRAIGHT;
+                } else if (direction.equals("Slight left")) {
+                    nd.direction = NavigationDirection.SLIGHT_LEFT;
+                } else if (direction.equals("Slight right")) {
+                    nd.direction = NavigationDirection.SLIGHT_RIGHT;
+                } else if (direction.equals("Turn right")) {
+                    nd.direction = NavigationDirection.RIGHT;
+                } else if (direction.equals("Turn left")) {
+                    nd.direction = NavigationDirection.LEFT;
+                } else if (direction.equals("Sharp left")) {
+                    nd.direction = NavigationDirection.SHARP_LEFT;
+                } else if (direction.equals("Sharp right")) {
+                    nd.direction = NavigationDirection.SHARP_RIGHT;
+                } else {
+                    return null;
+                }
+
+                nd.way = m.group(2);
+                try {
+                    nd.distance = Double.parseDouble(m.group(3));
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+                return nd;
+            } else {
+                // not a valid nd
+                return null;
+            }
         }
 
         @Override
