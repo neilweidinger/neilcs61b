@@ -51,7 +51,7 @@ public class IntList {
     }
 
     private static Deque<Integer> getInts(IntList A) {
-        Deque<Integer> stack = new ArrayDeque<Integer>();
+        Deque<Integer> stack = new ArrayDeque<>();
         IntList ptr = A;
 
         while (ptr != null) {
