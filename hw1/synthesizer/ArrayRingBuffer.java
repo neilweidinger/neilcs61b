@@ -84,6 +84,4 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         // TODO: Return the first item. None of your instance variables should change.
         return this.rb[first];
     }
-
-    // TODO: When you get to part 5, implement the needed code to support iteration.
 }
