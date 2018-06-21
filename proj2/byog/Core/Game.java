@@ -37,14 +37,12 @@ public class Game {
 
         // initialize world
         TETile[][] finalWorldFrame = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
-
-        //Room.drawRoom(finalWorldFrame, new Position(40, 15));
-        Room.drawRandomRooms(finalWorldFrame, 20);
+        WorldBuilder.generateWorld(finalWorldFrame);
 
         // render world
         ter.renderFrame(finalWorldFrame);
 
-        // retun world array
+        // return world array
         return finalWorldFrame;
     }
 }

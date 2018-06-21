@@ -1,5 +1,7 @@
-package byog.Core;
+package byog.Maze;
 
+import byog.Core.Position;
+import byog.Core.RandomUtils;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
@@ -37,7 +39,7 @@ public class Maze {
         int [] randDirs = generateRandDirs(rand);
 
         for (int i = 0; i < randDirs.length; i++) {
-            switch(randDirs[i]) {
+            switch (randDirs[i]) {
                 case 1: //up
                     // out of bounds of world 2d array
                     if (pos.y + 2 >= world[0].length) {

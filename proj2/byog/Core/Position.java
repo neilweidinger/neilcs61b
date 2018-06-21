@@ -18,4 +18,20 @@ public class Position {
         this.x = x;
         this.y = y;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+
+        Position p = (Position) other;
+        return (p.x == this.x && p.y == this.y);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + this.x;
+        result = 31 * result + this.y;
+        return result;
+    }
 }

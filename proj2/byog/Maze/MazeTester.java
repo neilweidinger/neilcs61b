@@ -1,9 +1,10 @@
-package byog.Core;
+package byog.Maze;
 
+import byog.Core.WorldBuilder;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 
-public class RoomTester {
+public class MazeTester {
     public static final int WIDTH = 81;
     public static final int HEIGHT = 51;
 
@@ -13,10 +14,8 @@ public class RoomTester {
 
         TETile[][] world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
 
-        Room.drawRandomRooms(world, 10);
+        Maze.generateMaze(world, 1);
 
         ter.renderFrame(world);
     }
 }
-
-
