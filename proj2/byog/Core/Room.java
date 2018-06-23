@@ -6,12 +6,12 @@ import byog.TileEngine.Tileset;
 
 public class Room {
 
-    public Position pos;
-    public Position connectionPos;
-    public int width;
-    public int len;
-    public TETile innerTile;
-    public TETile outerTile;
+    private Position pos;
+    private Position connectionPos;
+    private int width;
+    private int len;
+    private TETile innerTile;
+    private TETile outerTile;
 
     public Room() {
         this.pos = new Position(RandomUtils.uniform(WorldBuilder.r, Game.WIDTH),
@@ -32,7 +32,7 @@ public class Room {
         this.outerTile = Tileset.WALL;
     }
 
-    public void drawRoom(TETile[][] world, int count) {
+    public void drawRoom(TETile[][] world) {
         for (int x = this.pos.x; x < this.pos.x + this.width; x++) {
             for (int y = this.pos.y; y < this.pos.y + this.len; y++) {
                 //just checks for indexOutOfBounds error
@@ -164,9 +164,9 @@ public class Room {
             case 2:
                 return this.updatePositionRight(world, oldRoom);
             case 3:
-                return this.updatePositionDown(world, oldRoom);
+                return this.updatePositionDown(oldRoom);
             case 4:
-                return this.updatePositionLeft(world, oldRoom);
+                return this.updatePositionLeft(oldRoom);
         }
 
         return false;
@@ -205,7 +205,7 @@ public class Room {
         return true;
     }
 
-    private boolean updatePositionDown(TETile[][] world, Room oldRoom) {
+    private boolean updatePositionDown(Room oldRoom) {
         // just so that we don't feed a zero or a negative value to our random number generator below
         try {
             this.pos.x = oldRoom.pos.x + randomRange(-2, 2);
@@ -221,7 +221,7 @@ public class Room {
         return true;
     }
 
-    private boolean updatePositionLeft(TETile[][] world, Room oldRoom) {
+    private boolean updatePositionLeft(Room oldRoom) {
         // just so that we don't feed a zero or a negative value to our random number generator below
         try {
             this.pos.x = randomRange(0, oldRoom.pos.x - this.width - 1);

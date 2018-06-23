@@ -34,10 +34,8 @@ public class WorldBuilder {
             oldRoom = new Room();
         }
 
-        int roomCount = 0;
-
         // draw our initial room and push it to the stack
-        oldRoom.drawRoom(world, roomCount++);
+        oldRoom.drawRoom(world);
         stack.push(oldRoom);
 
         // generate a new room that goes in a random direction from our current room
@@ -47,7 +45,7 @@ public class WorldBuilder {
         while (!stack.isEmpty()) {
             // updates position of newRoom and enters block if there is space to draw
             if (newRoom.branchFrom(world, oldRoom)) {
-                newRoom.drawRoom(world, roomCount++);
+                newRoom.drawRoom(world);
                 newRoom.drawHallwayFrom(world, oldRoom);
 
                 oldRoom = new Room(newRoom); //update our oldRoom

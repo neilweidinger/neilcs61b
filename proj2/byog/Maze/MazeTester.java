@@ -5,7 +5,7 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 
 public class MazeTester {
-    public static final int WIDTH = 81;
+    public static final int WIDTH = 89;
     public static final int HEIGHT = 51;
 
     public static void main(String[] args) {
