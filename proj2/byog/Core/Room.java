@@ -1,8 +1,9 @@
 package byog.Core;
 
-import byog.Maze.Maze;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
+
+import java.util.Random;
 
 public class Room {
 
@@ -10,7 +11,7 @@ public class Room {
     private Position connectionPos;
     private int width;
     private int len;
-    private TETile innerTile;
+    private TETile innerTile; //change to static variable so we can easily change this
     private TETile outerTile;
 
     public Room() {
@@ -18,6 +19,16 @@ public class Room {
                                 RandomUtils.uniform(WorldBuilder.r, Game.HEIGHT));
         this.width = RandomUtils.uniform(WorldBuilder.r, 3, 15);
         this.len = RandomUtils.uniform(WorldBuilder.r, 3, 15);
+        this.connectionPos = getRandomConnectionPos();
+        this.innerTile = Tileset.FLOWER;
+        this.outerTile = Tileset.WALL;
+    }
+
+    public Room(int width, int len) {
+        this.pos = new Position(RandomUtils.uniform(WorldBuilder.r, Game.WIDTH),
+                RandomUtils.uniform(WorldBuilder.r, Game.HEIGHT));
+        this.width = width;
+        this.len = len;
         this.connectionPos = getRandomConnectionPos();
         this.innerTile = Tileset.FLOWER;
         this.outerTile = Tileset.WALL;
@@ -145,7 +156,7 @@ public class Room {
 
     // tries to branch (update position) of a room in every direction, returns true if successful
     public boolean branchFrom(TETile[][] world, Room oldRoom) {
-        int [] randDirs = Maze.generateRandDirs(WorldBuilder.r);
+        int [] randDirs = generateRandDirs(WorldBuilder.r);
 
         for (int direction : randDirs) {
             if (!this.updatePosition(world, oldRoom, direction)) continue;
@@ -236,6 +247,18 @@ public class Room {
 
         return true;
     }
+
+    public static int[] generateRandDirs(Random rand) {
+        int[] dirs = new int[4];
+
+        for (int i = 0; i < dirs.length; i++) {
+            dirs[i] = i + 1;
+        }
+
+        RandomUtils.shuffle(rand, dirs);
+        return dirs;
+    }
+
     // returns a random integer in [lower, upper]
     private static int randomRange(int lower, int upper) throws IllegalArgumentException {
         return RandomUtils.uniform(WorldBuilder.r, lower, upper + 1);
@@ -259,6 +282,10 @@ public class Room {
     // see above
     private int getRandomConnectionPosY() {
         return randomRange(this.pos.y + 1, this.pos.y + len - 2);
+    }
+
+    public Position returnConnectionPos() {
+        return this.connectionPos;
     }
 
     @Override

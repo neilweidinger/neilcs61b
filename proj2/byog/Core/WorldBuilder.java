@@ -7,8 +7,15 @@ import java.util.ArrayDeque;
 import java.util.Random;
 
 public class WorldBuilder {
-    public static final int SEED = 8;
+    // default just in case setSeed isn't called
+    public static long SEED = 8;
     public static Random r = new Random(SEED);
+    public static Position playerStart;
+
+    public static void setSeed(long seed) {
+        WorldBuilder.SEED = seed;
+        WorldBuilder.r = new Random(seed);
+    }
 
     // fill in world with a single type of tile
     public static TETile[][] initializeWorld(int width, int height) {
@@ -34,12 +41,16 @@ public class WorldBuilder {
             oldRoom = new Room();
         }
 
+        // set position where player will start game
+        playerStart = new Position(oldRoom.returnConnectionPos());
+
         // draw our initial room and push it to the stack
         oldRoom.drawRoom(world);
         stack.push(oldRoom);
 
         // generate a new room that goes in a random direction from our current room
-        Room newRoom = new Room(); 
+        // this room only has one walkable tile, so should generate a hallway turn
+        Room newRoom = new Room(3, 3);
         stack.push(newRoom);
 
         while (!stack.isEmpty()) {
