@@ -4,13 +4,14 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class WorldBuilder {
-    // default just in case setSeed isn't called
-    public static long SEED = 8;
-    public static Random r = new Random(SEED);
+    public static long SEED = 8; // default just in case setSeed isn't called
+    public static Random r = new Random(SEED); // default just in case setSeed isn't called
     public static Position playerStart;
+    public static ArrayList<Room> roomsList = new ArrayList<>();
 
     public static void setSeed(long seed) {
         WorldBuilder.SEED = seed;
@@ -47,6 +48,7 @@ public class WorldBuilder {
         // draw our initial room and push it to the stack
         oldRoom.drawRoom(world);
         stack.push(oldRoom);
+        roomsList.add(oldRoom);
 
         // generate a new room that goes in a random direction from our current room
         // this room only has one walkable tile, so should generate a hallway turn
@@ -58,6 +60,7 @@ public class WorldBuilder {
             if (newRoom.branchFrom(world, oldRoom)) {
                 newRoom.drawRoom(world);
                 newRoom.drawHallwayFrom(world, oldRoom);
+                roomsList.add(newRoom);
 
                 oldRoom = new Room(newRoom); //update our oldRoom
                 newRoom = new Room(); //regenerate room of random size
@@ -70,6 +73,10 @@ public class WorldBuilder {
                 newRoom = new Room();
                 oldRoom = stack.peek();
             }
+        }
+
+        for (Room r : roomsList) {
+            System.out.println(r);
         }
     }
 }

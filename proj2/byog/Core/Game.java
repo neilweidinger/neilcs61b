@@ -8,15 +8,20 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 
 public class Game {
-    TERenderer ter = new TERenderer();
+    // static so that we can render our world in Being class
+    static TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 40;
-    public static final int GUI_HEIGHT = 2;
+    private static final int GUI_HEIGHT = 2;
 
     // booleans to break out of loops, so that we don't keep listening to keyboard inputs when we don't want
     private boolean mainMenu;
     private boolean playingGame;
+    private int turns = 0;
+    private Player player;
+    private Enemy[] enemies;
+    private TETile[][] world;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -25,8 +30,7 @@ public class Game {
         // initialize renderer
         ter.initialize(WIDTH, HEIGHT + GUI_HEIGHT);
 
-        // initialize world
-        TETile[][] finalWorldFrame = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
+        world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
 
         // draw main menu - THIS ONLY DISPLAYS THE MENU, DOESN'T REALLY DO ANYTHING
         drawMainMenu();
@@ -36,15 +40,11 @@ public class Game {
         playingGame = false;
 
         while (mainMenu) {
-            // listen for user input while on main menu
-            mainMenuListener(finalWorldFrame);
+            mainMenuListener();
         }
 
         while (playingGame) {
-            // show GUI
-            drawGUI(finalWorldFrame);
-
-            // listen for user input while playing game
+            drawGUI();
             playingGameListener();
         }
     }
@@ -70,18 +70,18 @@ public class Game {
         ter.initialize(WIDTH, HEIGHT);
 
         // initialize world
-        TETile[][] finalWorldFrame = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
-        WorldBuilder.generateWorld(finalWorldFrame);
+        world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
+        WorldBuilder.generateWorld(world);
 
         // render world
-        ter.renderFrame(finalWorldFrame);
+        ter.renderFrame(world);
 
         // return world array
-        return finalWorldFrame;
+        return world;
     }
 
     // listen for user input while on main menu
-    private void mainMenuListener(TETile[][] world) {
+    private void mainMenuListener() {
         if (StdDraw.hasNextKeyTyped()) {
             char action = StdDraw.nextKeyTyped();
 
@@ -99,6 +99,7 @@ public class Game {
 
                     WorldBuilder.setSeed(askForSeed());
                     WorldBuilder.generateWorld(world);
+                    spawnAndDrawBeings();
                     
                     // reset font so that tiles are correct size before rendering world
                     resetFont();
@@ -122,6 +123,30 @@ public class Game {
             switch (action) {
                 case ':':
                     optionsListener();
+                    break;
+                case 'w':
+                case 'W':
+                    if (player.moveUp(world)) {
+                        turns++;
+                    }
+                    break;
+                case 'd':
+                case 'D':
+                    if (player.moveRight(world)) {
+                        turns++;
+                    }
+                    break;
+                case 's':
+                case 'S':
+                    if (player.moveDown(world)) {
+                        turns++;
+                    }
+                    break;
+                case 'a':
+                case 'A':
+                    if (player.moveLeft(world)) {
+                        turns++;
+                    }
                     break;
             }
         }
@@ -207,11 +232,8 @@ public class Game {
     }
 
     // draws gui while playing game
-    private void drawGUI(TETile[][] world) {
-        // really hacky way of making sure we clear the gui area but not the whole screen
-        StdDraw.setPenColor(Color.BLACK);
-        StdDraw.filledRectangle(WIDTH / 2, HEIGHT + (GUI_HEIGHT / 2), WIDTH / 2, (GUI_HEIGHT / 2));
-        StdDraw.setPenColor(Color.WHITE);
+    private void drawGUI() {
+        clearGUI();
 
         // display gui
         if (StdDraw.mouseY() >= HEIGHT) {
@@ -223,19 +245,27 @@ public class Game {
 
             StdDraw.textLeft(0, HEIGHT + (GUI_HEIGHT / 2), world[x][y].description());
         }
+        
+        StdDraw.textRight(WIDTH, HEIGHT + (GUI_HEIGHT / 2), "Turns: " + String.valueOf(turns));
 
         StdDraw.show();
     }
 
     // overloaded method to display custom message on GUI
     private void drawGUI(String message) {
-        // really hacky way of making sure we clear the gui area but not the whole screen
-        StdDraw.setPenColor(Color.BLACK);
-        StdDraw.filledRectangle(WIDTH / 2, HEIGHT + (GUI_HEIGHT / 2), WIDTH / 2, (GUI_HEIGHT / 2));
-        StdDraw.setPenColor(Color.GREEN);
+        clearGUI();
 
+        StdDraw.setPenColor(Color.GREEN);
         StdDraw.textLeft(0, HEIGHT + (GUI_HEIGHT / 2), message);
         StdDraw.show();
+    }
+
+    // really hacky way of making sure we clear the gui area but not the whole screen
+    // by default sets pen color to white
+    private void clearGUI() {
+        StdDraw.setPenColor(Color.BLACK);
+        StdDraw.filledRectangle(WIDTH / 2, HEIGHT + (GUI_HEIGHT / 2), WIDTH / 2, (GUI_HEIGHT / 2));
+        StdDraw.setPenColor(Color.WHITE);
     }
 
     private void drawMainMenu() {
@@ -270,6 +300,15 @@ public class Game {
         StdDraw.text(midWidth, midHeight - (1.5 * line), output);
 
         StdDraw.show();
+    }
+
+    // spawns and draws Player and enemies
+    private void spawnAndDrawBeings() {
+        player = new Player();
+        player.drawBeing(world);
+
+        enemies = Enemy.initializeEnemies();
+        Enemy.drawEnemies(world, enemies);
     }
 
     private void resetFont() {

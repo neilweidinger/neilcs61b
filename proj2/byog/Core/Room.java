@@ -6,13 +6,13 @@ import byog.TileEngine.Tileset;
 import java.util.Random;
 
 public class Room {
-
     private Position pos;
     private Position connectionPos;
     private int width;
     private int len;
-    private TETile innerTile; //change to static variable so we can easily change this
-    private TETile outerTile;
+
+    public static TETile innerTile = Tileset.FLOWER;
+    public static TETile outerTile = Tileset.WALL;
 
     public Room() {
         this.pos = new Position(RandomUtils.uniform(WorldBuilder.r, Game.WIDTH),
@@ -20,18 +20,14 @@ public class Room {
         this.width = RandomUtils.uniform(WorldBuilder.r, 3, 15);
         this.len = RandomUtils.uniform(WorldBuilder.r, 3, 15);
         this.connectionPos = getRandomConnectionPos();
-        this.innerTile = Tileset.FLOWER;
-        this.outerTile = Tileset.WALL;
     }
 
     public Room(int width, int len) {
         this.pos = new Position(RandomUtils.uniform(WorldBuilder.r, Game.WIDTH),
-                RandomUtils.uniform(WorldBuilder.r, Game.HEIGHT));
+                                RandomUtils.uniform(WorldBuilder.r, Game.HEIGHT));
         this.width = width;
         this.len = len;
         this.connectionPos = getRandomConnectionPos();
-        this.innerTile = Tileset.FLOWER;
-        this.outerTile = Tileset.WALL;
     }
 
     public Room(Room room) {
@@ -39,8 +35,6 @@ public class Room {
         this.width = room.width;
         this.len = room.len;
         this.connectionPos = room.connectionPos;
-        this.innerTile = Tileset.FLOWER;
-        this.outerTile = Tileset.WALL;
     }
 
     public void drawRoom(TETile[][] world) {
@@ -50,11 +44,11 @@ public class Room {
                 if (x < world.length && x >= 0 && y < world[0].length && y >= 0) {
                     //if drawing outline of room
                     if (x == this.pos.x || x == (this.pos.x + this.width) - 1 || y == this.pos.y || y == (this.pos.y + this.len) - 1) {
-                        world[x][y] = this.outerTile;
+                        world[x][y] = outerTile;
                     }
                     //if drawing inner part of room
                     else {
-                        world[x][y] = this.innerTile;
+                        world[x][y] = innerTile;
                     }
                 }
             }
@@ -94,12 +88,12 @@ public class Room {
             //just checks for indexOutOfBounds error
             if (xStart < world.length && xStart >= 0 && a.y < world[0].length && a.y >= 0) {
                 //doesn't draw hallway walls where there are walkable areas (prevent cutting rooms off)
-                if (world[xStart][a.y] != Tileset.FLOWER)
-                    world[xStart][a.y] = Tileset.FLOWER;
-                if (world[xStart][a.y - 1] != Tileset.FLOWER) 
-                    world[xStart][a.y - 1] = Tileset.WALL;
-                if (world[xStart][a.y + 1] != Tileset.FLOWER) 
-                    world[xStart][a.y + 1] = Tileset.WALL;
+                if (world[xStart][a.y] != Room.innerTile)
+                    world[xStart][a.y] = Room.innerTile;
+                if (world[xStart][a.y - 1] != Room.innerTile) 
+                    world[xStart][a.y - 1] = Room.outerTile;
+                if (world[xStart][a.y + 1] != Room.innerTile) 
+                    world[xStart][a.y + 1] = Room.outerTile;
             }
         }
     }
@@ -112,12 +106,12 @@ public class Room {
             //just checks for indexOutOfBounds error
             if (a.x < world.length && a.x >= 0 && yStart < world[0].length && yStart >= 0) {
                 //doesn't draw hallway walls where there are walkable areas (prevent cutting rooms off)
-                if (world[a.x][yStart] != Tileset.FLOWER)
-                    world[a.x][yStart] = Tileset.FLOWER;
-                if (world[a.x - 1][yStart] != Tileset.FLOWER)
-                    world[a.x - 1][yStart] = Tileset.WALL;
-                if (world[a.x + 1][yStart] != Tileset.FLOWER)
-                    world[a.x + 1][yStart] = Tileset.WALL;
+                if (world[a.x][yStart] != Room.innerTile)
+                    world[a.x][yStart] = Room.innerTile;
+                if (world[a.x - 1][yStart] != Room.innerTile)
+                    world[a.x - 1][yStart] = Room.outerTile;
+                if (world[a.x + 1][yStart] != Room.innerTile)
+                    world[a.x + 1][yStart] = Room.outerTile;
             }
         }
     }
@@ -128,7 +122,7 @@ public class Room {
         for (int x = corner.x - 1; x <= corner.x + 1; x++) {
             for (int y = corner.y - 1; y <= corner.y + 1; y++) {
                 if (world[x][y] == Tileset.NOTHING) {
-                    world[x][y] = Tileset.WALL;
+                    world[x][y] = Room.outerTile;
                 }
             }
         }
@@ -248,6 +242,7 @@ public class Room {
         return true;
     }
 
+    // return an array in random order of ints 1 - 4 that correspond to directions
     public static int[] generateRandDirs(Random rand) {
         int[] dirs = new int[4];
 
@@ -278,7 +273,6 @@ public class Room {
         return randomRange(this.pos.x + 1, this.pos.x + width - 2);
     }
 
-    // instead of returning a new Position object like the method above, this just edits the y value
     // see above
     private int getRandomConnectionPosY() {
         return randomRange(this.pos.y + 1, this.pos.y + len - 2);
