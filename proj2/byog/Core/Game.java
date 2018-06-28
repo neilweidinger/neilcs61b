@@ -127,24 +127,32 @@ public class Game {
                 case 'w':
                 case 'W':
                     if (player.moveUp(world)) {
+                        Enemy.moveEnemies(world, enemies);
+                        ter.renderFrame(world);
                         turns++;
                     }
                     break;
                 case 'd':
                 case 'D':
                     if (player.moveRight(world)) {
+                        Enemy.moveEnemies(world, enemies);
+                        ter.renderFrame(world);
                         turns++;
                     }
                     break;
                 case 's':
                 case 'S':
                     if (player.moveDown(world)) {
+                        Enemy.moveEnemies(world, enemies);
+                        ter.renderFrame(world);
                         turns++;
                     }
                     break;
                 case 'a':
                 case 'A':
                     if (player.moveLeft(world)) {
+                        Enemy.moveEnemies(world, enemies);
+                        ter.renderFrame(world);
                         turns++;
                     }
                     break;

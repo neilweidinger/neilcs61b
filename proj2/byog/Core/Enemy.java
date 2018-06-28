@@ -26,4 +26,42 @@ public class Enemy extends Being {
             enemy.drawBeing(world);
         }
     }
+
+    public static void moveEnemies(TETile[][] world, Enemy[] enemies) {
+        for (Enemy enemy : enemies) {
+            enemy.moveEnemiesHelper(world);
+        }
+    }
+
+    private void moveEnemiesHelper(TETile[][] world) {
+        int[] randDirs = Room.generateRandDirs(WorldBuilder.r);
+        boolean success = false;
+
+        for (int dir : randDirs) {
+            switch (dir) {
+                case 1:
+                    if (this.moveUp(world)) {
+                        success = true;
+                    }
+                    break;
+                case 2:
+                    if (this.moveRight(world)) {
+                        success = true;
+                    }
+                    break;
+                case 3:
+                    if (this.moveDown(world)) {
+                        success = true;
+                    }
+                    break;
+                case 4:
+                    if (this.moveLeft(world)) {
+                        success = true;
+                    }
+                    break;
+            }
+
+            if (success) break;
+        }
+    }
 }
