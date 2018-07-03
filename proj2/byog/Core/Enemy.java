@@ -4,9 +4,16 @@ import byog.TileEngine.Tileset;
 import byog.TileEngine.TETile;
 
 public class Enemy extends Being {
+    // static variable so we can easily check Enemy tile type without calling an enemy instance
+    private static TETile tileStatic;
+
     public Enemy(Position pos) {
         setPos(pos);
         setTile(Tileset.SAND);
+    }
+
+    public static TETile returnEnemyTile() {
+        return tileStatic;
     }
 
     public static Enemy[] initializeEnemies() {
@@ -63,5 +70,11 @@ public class Enemy extends Being {
 
             if (success) break;
         }
+    }
+
+    @Override
+    protected void setTile(TETile tile) {
+        super.setTile(tile);
+        tileStatic = tile; 
     }
 }

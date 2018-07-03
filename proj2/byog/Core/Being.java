@@ -17,12 +17,36 @@ public abstract class Being {
         this.pos = pos;
     }
 
-    public void setTile(TETile tile) {
+    protected void setTile(TETile tile) {
         this.tile = tile;
     }
 
+    public static boolean isTouchingEnemy(TETile[][] world, Being being) {
+        // up
+        if (world[being.pos.x][being.pos.y + 1].equals(Enemy.returnEnemyTile())) {
+            return true;
+        }
+
+        // right
+        if (world[being.pos.x + 1][being.pos.y].equals(Enemy.returnEnemyTile())) {
+            return true;
+        }
+
+        // down
+        if (world[being.pos.x][being.pos.y - 1].equals(Enemy.returnEnemyTile())) {
+            return true;
+        }
+
+        // left
+        if (world[being.pos.x - 1][being.pos.y].equals(Enemy.returnEnemyTile())) {
+            return true;
+        }
+
+        return false;
+    }
+
     // each move method moves being AND draws into our world 2D array
-    // STILL NEED TO RENDER AFTER CALLING THIS
+    // WORLD STILL NEEDS TO BE RENDERED AFTER CALLING THIS
     public boolean moveUp(TETile[][] world) {
         Position newPos = new Position(this.pos.x, this.pos.y + 1);
         return moveHelper(world, newPos);

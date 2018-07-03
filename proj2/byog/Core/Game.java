@@ -18,7 +18,8 @@ public class Game {
     // booleans to break out of loops, so that we don't keep listening to keyboard inputs when we don't want
     private boolean mainMenu;
     private boolean playingGame;
-    private int turns = 0;
+    private int nourishment = 100;
+    private int lives = 3;
     private Player player;
     private Enemy[] enemies;
     private TETile[][] world;
@@ -46,6 +47,11 @@ public class Game {
         while (playingGame) {
             drawGUI();
             playingGameListener();
+
+            if (lives == 0) {
+                gameOver();
+                break;
+            }
         }
     }
 
@@ -127,33 +133,25 @@ public class Game {
                 case 'w':
                 case 'W':
                     if (player.moveUp(world)) {
-                        Enemy.moveEnemies(world, enemies);
-                        ter.renderFrame(world);
-                        turns++;
+                        checkForEnemyCollision();
                     }
                     break;
                 case 'd':
                 case 'D':
                     if (player.moveRight(world)) {
-                        Enemy.moveEnemies(world, enemies);
-                        ter.renderFrame(world);
-                        turns++;
+                        checkForEnemyCollision();
                     }
                     break;
                 case 's':
                 case 'S':
                     if (player.moveDown(world)) {
-                        Enemy.moveEnemies(world, enemies);
-                        ter.renderFrame(world);
-                        turns++;
+                        checkForEnemyCollision();
                     }
                     break;
                 case 'a':
                 case 'A':
                     if (player.moveLeft(world)) {
-                        Enemy.moveEnemies(world, enemies);
-                        ter.renderFrame(world);
-                        turns++;
+                        checkForEnemyCollision();
                     }
                     break;
             }
@@ -171,6 +169,7 @@ public class Game {
 
         switch (secondAction) {
             case 'q':
+            case 'Q':
                 playingGame = false;
                 StdDraw.clear(Color.BLACK);
                 StdDraw.show();
@@ -254,7 +253,9 @@ public class Game {
             StdDraw.textLeft(0, HEIGHT + (GUI_HEIGHT / 2), world[x][y].description());
         }
         
-        StdDraw.textRight(WIDTH, HEIGHT + (GUI_HEIGHT / 2), "Turns: " + String.valueOf(turns));
+        String nourishmentAndLivesStats = "Lives: " + String.valueOf(lives) + " --- Nourishment: " +
+                                          String.valueOf(nourishment);
+        StdDraw.textRight(WIDTH, HEIGHT + (GUI_HEIGHT / 2), nourishmentAndLivesStats);
 
         StdDraw.show();
     }
@@ -286,7 +287,6 @@ public class Game {
     // draws big text in center of screen
     private void drawBigText(String output) {
         int midWidth = WIDTH / 2;
-        int midHeight = HEIGHT / 2;
 
         StdDraw.clear(Color.BLACK); 
 
@@ -317,6 +317,38 @@ public class Game {
 
         enemies = Enemy.initializeEnemies();
         Enemy.drawEnemies(world, enemies);
+    }
+
+    private void checkForEnemyCollision() {
+        // after player moves, before enemies move
+        if (Being.isTouchingEnemy(world, player)) {
+            adjustNourishmentAndLives();
+            return;
+        }
+
+        Enemy.moveEnemies(world, enemies);
+
+        // after player moves and after enemies move
+        if (Being.isTouchingEnemy(world, player)) {
+            adjustNourishmentAndLives();
+        }
+
+        ter.renderFrame(world);
+    }
+
+    private void adjustNourishmentAndLives() {
+        nourishment -= 20;
+
+        if (nourishment == 0) {
+            lives--;
+            nourishment = 100;
+        }
+    }
+
+    private void gameOver() {
+        playingGame = false;
+        drawBigText("GAME OVER");
+        StdDraw.show();
     }
 
     private void resetFont() {

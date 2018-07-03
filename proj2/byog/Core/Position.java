@@ -21,6 +21,7 @@ public class Position {
 
     @Override
     public boolean equals(Object other) {
+        if (!(other instanceof Position)) return false;
         if (this == other) return true;
 
         Position p = (Position) other;
