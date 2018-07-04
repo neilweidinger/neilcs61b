@@ -3,6 +3,8 @@ package byog.Core;
 import byog.TileEngine.Tileset;
 import byog.TileEngine.TETile;
 
+import java.util.ArrayList;
+
 public class Enemy extends Being {
     // static variable so we can easily check Enemy tile type without calling an enemy instance
     private static TETile tileStatic;
@@ -16,25 +18,25 @@ public class Enemy extends Being {
         return tileStatic;
     }
 
-    public static Enemy[] initializeEnemies() {
+    public static ArrayList<Enemy> initializeEnemies() {
+        ArrayList<Enemy> enemies = new ArrayList<>();
+
         // we substract 1 from total num of rooms bc we don't want to add an enemy to the first room
         // which is where our player spawns
-        Enemy[] enemies = new Enemy[WorldBuilder.getRoomsList().size() - 1];
-
-        for (int i = 0; i < enemies.length; i++) {
-            enemies[i] = new Enemy(WorldBuilder.getRoomsList().get(i + 1).getConnectionPos());
+        for (int i = 0; i < WorldBuilder.getRoomsList().size() - 1; i++) {
+            enemies.add(new Enemy(WorldBuilder.getRoomsList().get(i + 1).getConnectionPos()));
         }
 
         return enemies;
     }
 
-    public static void drawEnemies(TETile[][] world, Enemy[] enemies) {
+    public static void drawEnemies(TETile[][] world, ArrayList<Enemy> enemies) {
         for (Enemy enemy : enemies) {
             enemy.drawBeing(world);
         }
     }
 
-    public static void moveEnemies(TETile[][] world, Enemy[] enemies) {
+    public static void moveEnemies(TETile[][] world, ArrayList<Enemy> enemies) {
         for (Enemy enemy : enemies) {
             enemy.moveEnemiesHelper(world);
         }

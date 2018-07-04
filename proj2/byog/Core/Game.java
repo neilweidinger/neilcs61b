@@ -1,11 +1,12 @@
 package byog.Core;
 
+import byog.TileEngine.TERenderer;
+import byog.TileEngine.TETile;
+
 import edu.princeton.cs.introcs.StdDraw;
 import java.awt.Color;
 import java.awt.Font;
-
-import byog.TileEngine.TERenderer;
-import byog.TileEngine.TETile;
+import java.util.ArrayList;
 
 public class Game {
     // static so that we can render our world in Being class
@@ -21,7 +22,7 @@ public class Game {
     private int nourishment = 100;
     private int lives = 3;
     private Player player;
-    private Enemy[] enemies;
+    private ArrayList<Enemy> enemies;
     private Door goalDoor;
     private TETile[][] world;
 
