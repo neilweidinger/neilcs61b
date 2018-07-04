@@ -21,6 +21,10 @@ public abstract class Being {
         this.tile = tile;
     }
 
+    public Position getPos() {
+        return this.pos;
+    }
+
     public static boolean isTouchingEnemy(TETile[][] world, Being being) {
         // up
         if (world[being.pos.x][being.pos.y + 1].equals(Enemy.returnEnemyTile())) {

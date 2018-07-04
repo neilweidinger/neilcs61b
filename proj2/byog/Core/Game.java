@@ -2,6 +2,7 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
 
 import edu.princeton.cs.introcs.StdDraw;
 import java.awt.Color;
@@ -9,7 +10,6 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 public class Game {
-    // static so that we can render our world in Being class
     static TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
@@ -24,7 +24,7 @@ public class Game {
     private Player player;
     private ArrayList<Enemy> enemies;
     private Door goalDoor;
-    private TETile[][] world;
+    private TETile[][] world; //static so we can render using static method (called from outside of game class)
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -108,6 +108,9 @@ public class Game {
                     WorldBuilder.setSeed(askForSeed());
                     WorldBuilder.generateWorld(world);
                     spawnBeingsAndDoor();
+
+                    world[0][0] = Tileset.HORIZONTAL_DART;
+                    world[0][1] = Tileset.VERTICAL_DART;
                     
                     // reset font so that tiles are correct size before rendering world
                     resetFont();
@@ -154,6 +157,38 @@ public class Game {
                 case 'A':
                     if (player.moveLeft(world)) {
                         checkForEnemyCollision();
+                    }
+                    break;
+                case 'i':
+                case 'I':
+                    Dart.shootUp(world, player.getPos());
+                    while (StdDraw.hasNextKeyTyped()) {
+                        // make sure keys entered while shooting dart are not registered
+                        StdDraw.nextKeyTyped();
+                    }
+                    break;
+                case 'l':
+                case 'L':
+                    Dart.shootRight(world, player.getPos());
+                    while (StdDraw.hasNextKeyTyped()) {
+                        // make sure keys entered while shooting dart are not registered
+                        StdDraw.nextKeyTyped();
+                    }
+                    break;
+                case 'k':
+                case 'K':
+                    Dart.shootDown(world, player.getPos());
+                    while (StdDraw.hasNextKeyTyped()) {
+                        // make sure keys entered while shooting dart are not registered
+                        StdDraw.nextKeyTyped();
+                    }
+                    break;
+                case 'j':
+                case 'J':
+                    Dart.shootLeft(world, player.getPos());
+                    while (StdDraw.hasNextKeyTyped()) {
+                        // make sure keys entered while shooting dart are not registered
+                        StdDraw.nextKeyTyped();
                     }
                     break;
             }
@@ -351,6 +386,8 @@ public class Game {
     }
 
     private void gameOver() {
+        drawGUI("GAME OVER");
+        StdDraw.pause(1000);
         playingGame = false;
         drawBigText("GAME OVER");
         StdDraw.show();
