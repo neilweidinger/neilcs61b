@@ -19,10 +19,10 @@ public class Enemy extends Being {
     public static Enemy[] initializeEnemies() {
         // we substract 1 from total num of rooms bc we don't want to add an enemy to the first room
         // which is where our player spawns
-        Enemy[] enemies = new Enemy[WorldBuilder.roomsList.size() - 1];
+        Enemy[] enemies = new Enemy[WorldBuilder.getRoomsList().size() - 1];
 
         for (int i = 0; i < enemies.length; i++) {
-            enemies[i] = new Enemy(WorldBuilder.roomsList.get(i + 1).returnConnectionPos());
+            enemies[i] = new Enemy(WorldBuilder.getRoomsList().get(i + 1).getConnectionPos());
         }
 
         return enemies;

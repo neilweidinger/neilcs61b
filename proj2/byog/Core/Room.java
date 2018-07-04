@@ -278,8 +278,38 @@ public class Room {
         return randomRange(this.pos.y + 1, this.pos.y + len - 2);
     }
 
-    public Position returnConnectionPos() {
+    public Position getConnectionPos() {
         return this.connectionPos;
+    }
+
+    public Position getGoalDoorPos(TETile[][] world) throws IndexOutOfBoundsException {
+        // check bottom and top row of room
+        for (int x = this.pos.x + 1; x < (this.pos.x + this.width) - 1; x++) {
+            //check bottom row
+            if (world[x][this.pos.y].equals(Room.outerTile)) {
+                return new Position(x, this.pos.y);
+            }
+
+            //check top row
+            if (world[x][(this.pos.y + this.len) - 1].equals(Room.outerTile)) {
+                return new Position(x, this.pos.y);
+            }
+        }
+
+        // check left and right column of room
+        for (int y = this.pos.y + 1; y < (this.pos.y + this.len) - 1; y++) {
+            //check left column
+            if (world[this.pos.x][y].equals(Room.outerTile)) {
+                return new Position(this.pos.x, y);
+            }
+
+            //check right column
+            if (world[(this.pos.x + this.width) - 1][y].equals(Room.outerTile)) {
+                return new Position(this.pos.x, y);
+            }
+        }
+
+        throw new IndexOutOfBoundsException();
     }
 
     @Override

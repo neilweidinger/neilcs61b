@@ -4,7 +4,7 @@ import byog.TileEngine.Tileset;
 
 public class Player extends Being {
     public Player() {
-        setPos(WorldBuilder.playerStart);
+        setPos(WorldBuilder.getPlayerStart());
         setTile(Tileset.PLAYER);
     }
 }

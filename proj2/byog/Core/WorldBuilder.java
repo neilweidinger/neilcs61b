@@ -10,8 +10,8 @@ import java.util.Random;
 public class WorldBuilder {
     public static long SEED = 8; // default just in case setSeed isn't called
     public static Random r = new Random(SEED); // default just in case setSeed isn't called
-    public static Position playerStart;
-    public static ArrayList<Room> roomsList = new ArrayList<>();
+    private static ArrayList<Room> roomsList = new ArrayList<>();
+    private static Position playerStart;
 
     public static void setSeed(long seed) {
         WorldBuilder.SEED = seed;
@@ -43,7 +43,7 @@ public class WorldBuilder {
         }
 
         // set position where player will start game
-        playerStart = new Position(oldRoom.returnConnectionPos());
+        playerStart = new Position(oldRoom.getConnectionPos());
 
         // draw our initial room and push it to the stack
         oldRoom.drawRoom(world);
@@ -78,5 +78,26 @@ public class WorldBuilder {
         for (Room r : roomsList) {
             System.out.println(r);
         }
+    }
+
+    public static Position getGoalDoorPos(TETile[][] world) {
+        Room lastRoom = roomsList.get(roomsList.size() - 1);
+
+        try {
+            return lastRoom.getGoalDoorPos(world);
+        }
+        catch (IndexOutOfBoundsException e) {
+            System.out.println("no door pos found");
+        }
+
+        return new Position();
+    }
+
+    public static Position getPlayerStart() {
+        return playerStart;
+    }
+
+    public static ArrayList<Room> getRoomsList() {
+        return roomsList;
     }
 }

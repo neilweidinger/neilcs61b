@@ -22,6 +22,7 @@ public class Game {
     private int lives = 3;
     private Player player;
     private Enemy[] enemies;
+    private Door goalDoor;
     private TETile[][] world;
 
     /**
@@ -105,7 +106,7 @@ public class Game {
 
                     WorldBuilder.setSeed(askForSeed());
                     WorldBuilder.generateWorld(world);
-                    spawnAndDrawBeings();
+                    spawnBeingsAndDoor();
                     
                     // reset font so that tiles are correct size before rendering world
                     resetFont();
@@ -311,13 +312,16 @@ public class Game {
     }
 
     // spawns and draws Player and enemies
-    private void spawnAndDrawBeings() {
+    private void spawnBeingsAndDoor() {
         player = new Player();
         player.drawBeing(world);
 
+        goalDoor = new Door(world);
+        goalDoor.drawDoor(world);
+
         enemies = Enemy.initializeEnemies();
         Enemy.drawEnemies(world, enemies);
-    }
+}
 
     private void checkForEnemyCollision() {
         // after player moves, before enemies move
