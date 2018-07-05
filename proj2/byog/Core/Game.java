@@ -21,6 +21,7 @@ public class Game {
     private boolean playingGame;
     private int nourishment = 100;
     private int lives = 3;
+    private int darts = 50;
     private Player player;
     private ArrayList<Enemy> enemies;
     private Door goalDoor;
@@ -108,9 +109,6 @@ public class Game {
                     WorldBuilder.setSeed(askForSeed());
                     WorldBuilder.generateWorld(world);
                     spawnBeingsAndDoor();
-
-                    world[0][0] = Tileset.HORIZONTAL_DART;
-                    world[0][1] = Tileset.VERTICAL_DART;
                     
                     // reset font so that tiles are correct size before rendering world
                     resetFont();
@@ -161,35 +159,51 @@ public class Game {
                     break;
                 case 'i':
                 case 'I':
+                    if (darts <= 0) break;
+
                     Dart.shootUp(world, player.getPos());
                     while (StdDraw.hasNextKeyTyped()) {
                         // make sure keys entered while shooting dart are not registered
                         StdDraw.nextKeyTyped();
                     }
+
+                    darts--;
                     break;
                 case 'l':
                 case 'L':
+                    if (darts <= 0) break;
+
                     Dart.shootRight(world, player.getPos());
                     while (StdDraw.hasNextKeyTyped()) {
                         // make sure keys entered while shooting dart are not registered
                         StdDraw.nextKeyTyped();
                     }
+
+                    darts--;
                     break;
                 case 'k':
                 case 'K':
+                    if (darts <= 0) break;
+
                     Dart.shootDown(world, player.getPos());
                     while (StdDraw.hasNextKeyTyped()) {
                         // make sure keys entered while shooting dart are not registered
                         StdDraw.nextKeyTyped();
                     }
+
+                    darts--;
                     break;
                 case 'j':
                 case 'J':
+                    if (darts <= 0) break;
+
                     Dart.shootLeft(world, player.getPos());
                     while (StdDraw.hasNextKeyTyped()) {
                         // make sure keys entered while shooting dart are not registered
                         StdDraw.nextKeyTyped();
                     }
+
+                    darts--;
                     break;
             }
         }
@@ -290,8 +304,9 @@ public class Game {
             StdDraw.textLeft(0, HEIGHT + (GUI_HEIGHT / 2), world[x][y].description());
         }
         
-        String nourishmentAndLivesStats = "Lives: " + String.valueOf(lives) + " --- Nourishment: " +
-                                          String.valueOf(nourishment);
+        String nourishmentAndLivesStats = "Darts: " + String.valueOf(darts) +
+                                          " --- Lives: " + String.valueOf(lives) +
+                                          " --- Nourishment: " + String.valueOf(nourishment);
         StdDraw.textRight(WIDTH, HEIGHT + (GUI_HEIGHT / 2), nourishmentAndLivesStats);
 
         StdDraw.show();
