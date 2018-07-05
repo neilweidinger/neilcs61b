@@ -10,11 +10,11 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 public class Game {
-    static TERenderer ter = new TERenderer();
+    public static TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 40;
-    private static final int GUI_HEIGHT = 2;
+    public static final int GUI_HEIGHT = 2;
 
     // booleans to break out of loops, so that we don't keep listening to keyboard inputs when we don't want
     private boolean mainMenu;
@@ -162,48 +162,36 @@ public class Game {
                     if (darts <= 0) break;
 
                     Dart.shootUp(world, player.getPos());
-                    while (StdDraw.hasNextKeyTyped()) {
-                        // make sure keys entered while shooting dart are not registered
-                        StdDraw.nextKeyTyped();
-                    }
-
+                    clearUserInput();
                     darts--;
+
                     break;
                 case 'l':
                 case 'L':
                     if (darts <= 0) break;
 
                     Dart.shootRight(world, player.getPos());
-                    while (StdDraw.hasNextKeyTyped()) {
-                        // make sure keys entered while shooting dart are not registered
-                        StdDraw.nextKeyTyped();
-                    }
-
+                    clearUserInput();
                     darts--;
+
                     break;
                 case 'k':
                 case 'K':
                     if (darts <= 0) break;
 
                     Dart.shootDown(world, player.getPos());
-                    while (StdDraw.hasNextKeyTyped()) {
-                        // make sure keys entered while shooting dart are not registered
-                        StdDraw.nextKeyTyped();
-                    }
-
+                    clearUserInput();
                     darts--;
+
                     break;
                 case 'j':
                 case 'J':
                     if (darts <= 0) break;
 
                     Dart.shootLeft(world, player.getPos());
-                    while (StdDraw.hasNextKeyTyped()) {
-                        // make sure keys entered while shooting dart are not registered
-                        StdDraw.nextKeyTyped();
-                    }
-
+                    clearUserInput();
                     darts--;
+
                     break;
             }
         }
@@ -397,6 +385,13 @@ public class Game {
         if (nourishment == 0) {
             lives--;
             nourishment = 100;
+        }
+    }
+
+    private void clearUserInput() {
+        while (StdDraw.hasNextKeyTyped()) {
+            // make sure keys entered while shooting dart are not registered
+            StdDraw.nextKeyTyped();
         }
     }
 
