@@ -355,11 +355,12 @@ public class Game {
         player = new Player();
         player.drawBeing(world);
 
+        enemies = Enemy.initializeEnemies();
+        Enemy.drawEnemies(world, enemies);
+
         goalDoor = new Door(world);
         goalDoor.drawDoor(world);
 
-        enemies = Enemy.initializeEnemies();
-        Enemy.drawEnemies(world, enemies);
 }
 
     private void checkForEnemyCollision() {

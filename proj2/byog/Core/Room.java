@@ -292,7 +292,7 @@ public class Room {
 
             //check top row
             if (world[x][(this.pos.y + this.len) - 1].equals(Room.outerTile)) {
-                return new Position(x, this.pos.y);
+                return new Position(x, (this.pos.y + this.len) - 1);
             }
         }
 
@@ -305,7 +305,7 @@ public class Room {
 
             //check right column
             if (world[(this.pos.x + this.width) - 1][y].equals(Room.outerTile)) {
-                return new Position(this.pos.x, y);
+                return new Position((this.pos.x + this.width) - 1, y);
             }
         }
 
