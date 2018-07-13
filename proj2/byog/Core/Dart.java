@@ -1,30 +1,32 @@
 package byog.Core;
 
-import edu.princeton.cs.introcs.StdDraw;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
+
+import edu.princeton.cs.introcs.StdDraw;
+import java.util.ArrayList;
 
 public class Dart {
     private static Position dartPos;
     private static TETile tile;
 
-    public static void shootUp(TETile[][] world, Position origin) {
-        shootHelper(world, origin, 1);
+    public static void shootUp(TETile[][] world, ArrayList<Enemy> enemies, Position origin) {
+        shootHelper(world, enemies, origin, 1);
     }
 
-    public static void shootRight(TETile[][] world, Position origin) {
-        shootHelper(world, origin, 2);
+    public static void shootRight(TETile[][] world, ArrayList<Enemy> enemies, Position origin) {
+        shootHelper(world, enemies, origin, 2);
     }
 
-    public static void shootDown(TETile[][] world, Position origin) {
-        shootHelper(world, origin, 3);
+    public static void shootDown(TETile[][] world, ArrayList<Enemy> enemies, Position origin) {
+        shootHelper(world, enemies, origin, 3);
     }
 
-    public static void shootLeft(TETile[][] world, Position origin) {
-        shootHelper(world, origin, 4);
+    public static void shootLeft(TETile[][] world, ArrayList<Enemy> enemies, Position origin) {
+        shootHelper(world, enemies, origin, 4);
     }
 
-    private static void shootHelper(TETile[][] world, Position origin, int dir) {
+    private static void shootHelper(TETile[][] world, ArrayList<Enemy> enemies, Position origin, int dir) {
         dartPos = new Position(origin);
         updateDartPos(dir, dartPos);
         setDartTile(dir);
@@ -34,8 +36,19 @@ public class Dart {
             Game.ter.renderFrame(world);
             StdDraw.pause(50); //animation interval
 
-            world[dartPos.x][dartPos.y] = Room.innerTile; //redraw standard walkable tile back
+            world[dartPos.x][dartPos.y] = Room.innerTile; //redraws Room innerTile
             updateDartPos(dir, dartPos); //update dart in path of trajectory
+        }
+
+        // dart managed to hit enemy
+        if (world[dartPos.x][dartPos.y].equals(Enemy.returnEnemyTile())) {
+            world[dartPos.x][dartPos.y] = Room.innerTile; //redraws Room innerTile
+
+            for (int i = 0; i < enemies.size(); i++) {
+                if (dartPos.equals(enemies.get(i).getPos())) {
+                    enemies.remove(i);
+                }
+            }
         }
 
         Game.ter.renderFrame(world);

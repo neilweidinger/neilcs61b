@@ -161,7 +161,7 @@ public class Game {
                 case 'I':
                     if (darts <= 0) break;
 
-                    Dart.shootUp(world, player.getPos());
+                    Dart.shootUp(world, enemies, player.getPos());
                     clearUserInput();
                     darts--;
 
@@ -170,7 +170,7 @@ public class Game {
                 case 'L':
                     if (darts <= 0) break;
 
-                    Dart.shootRight(world, player.getPos());
+                    Dart.shootRight(world, enemies, player.getPos());
                     clearUserInput();
                     darts--;
 
@@ -179,7 +179,7 @@ public class Game {
                 case 'K':
                     if (darts <= 0) break;
 
-                    Dart.shootDown(world, player.getPos());
+                    Dart.shootDown(world, enemies, player.getPos());
                     clearUserInput();
                     darts--;
 
@@ -188,7 +188,7 @@ public class Game {
                 case 'J':
                     if (darts <= 0) break;
 
-                    Dart.shootLeft(world, player.getPos());
+                    Dart.shootLeft(world, enemies, player.getPos());
                     clearUserInput();
                     darts--;
 

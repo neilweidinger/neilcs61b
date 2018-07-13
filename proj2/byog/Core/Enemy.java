@@ -20,11 +20,14 @@ public class Enemy extends Being {
 
     public static ArrayList<Enemy> initializeEnemies() {
         ArrayList<Enemy> enemies = new ArrayList<>();
+        ArrayList<Room> roomsListCopy = WorldBuilder.getRoomsList();
 
         // we substract 1 from total num of rooms bc we don't want to add an enemy to the first room
         // which is where our player spawns
+        // but we use i + 1 to index since when i = 0 we want to get 1, so we don't access the first room
         for (int i = 0; i < WorldBuilder.getRoomsList().size() - 1; i++) {
-            enemies.add(new Enemy(WorldBuilder.getRoomsList().get(i + 1).getConnectionPos()));
+            enemies.add(new Enemy(roomsListCopy.get(i + 1)
+                                               .getConnectionPos()));
         }
 
         return enemies;
