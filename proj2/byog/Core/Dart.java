@@ -7,7 +7,6 @@ import byog.TileEngine.Tileset;
 public class Dart {
     private static Position dartPos;
     private static TETile tile;
-    private static TETile tileAtDartPos;
 
     public static void shootUp(TETile[][] world, Position origin) {
         shootHelper(world, origin, 1);
@@ -29,16 +28,14 @@ public class Dart {
         dartPos = new Position(origin);
         updateDartPos(dir, dartPos);
         setDartTile(dir);
-        updateTileAtDartPos(world);
 
-        while (tileAtDartPos.equals(Room.innerTile)) {
+        while (world[dartPos.x][dartPos.y].equals(Room.innerTile)) {
             world[dartPos.x][dartPos.y] = tile; //draw dart
             Game.ter.renderFrame(world);
             StdDraw.pause(50); //animation interval
 
             world[dartPos.x][dartPos.y] = Room.innerTile; //redraw standard walkable tile back
             updateDartPos(dir, dartPos); //update dart in path of trajectory
-            updateTileAtDartPos(world); //update helper tile that dart will write over
         }
 
         Game.ter.renderFrame(world);
@@ -59,10 +56,6 @@ public class Dart {
                 dart.x -= 1;
                 break;
         }
-    }
-
-    private static void updateTileAtDartPos(TETile[][] world) {
-        tileAtDartPos = world[dartPos.x][dartPos.y];
     }
 
     private static void setDartTile(int dir) {
