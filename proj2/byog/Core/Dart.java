@@ -36,22 +36,20 @@ public class Dart {
             Game.ter.renderFrame(world);
             StdDraw.pause(50); //animation interval
 
-            world[dartPos.x][dartPos.y] = Room.innerTile; //redraws Room innerTile
+            world[dartPos.x][dartPos.y] = Room.innerTile; //redraws Room innerTile aka erases dart
             updateDartPos(dir, dartPos); //update dart in path of trajectory
         }
 
-        // dart managed to hit enemy
-        if (world[dartPos.x][dartPos.y].equals(Enemy.returnEnemyTile())) {
+        if (Dart.hitEnemy(world, dartPos)) {
             world[dartPos.x][dartPos.y] = Room.innerTile; //redraws Room innerTile
-
-            for (int i = 0; i < enemies.size(); i++) {
-                if (dartPos.equals(enemies.get(i).getPos())) {
-                    enemies.remove(i);
-                }
-            }
+            Enemy.deleteEnemyWithSamePositionAs(dartPos, enemies); //delete enemy
         }
 
         Game.ter.renderFrame(world);
+    }
+
+    private static boolean hitEnemy(TETile[][] world, Position dartPos) {
+        return world[dartPos.x][dartPos.y].equals(Enemy.returnEnemyTile());
     }
 
     private static void updateDartPos(int dir, Position dart) {

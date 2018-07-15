@@ -45,6 +45,14 @@ public class Enemy extends Being {
         }
     }
 
+    public static void deleteEnemyWithSamePositionAs(Position dartPos, ArrayList<Enemy> enemies) {
+        for (int i = 0; i < enemies.size(); i++) {
+            if (dartPos.equals(enemies.get(i).getPos())) {
+                enemies.remove(i);
+            }
+        }
+    }
+
     private void moveEnemiesHelper(TETile[][] world) {
         int[] randDirs = Room.generateRandDirs(WorldBuilder.r);
         boolean success = false;
