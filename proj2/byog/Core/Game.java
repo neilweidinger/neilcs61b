@@ -19,6 +19,7 @@ public class Game {
     // booleans to break out of loops, so that we don't keep listening to keyboard inputs when we don't want
     private boolean mainMenu;
     private boolean playingGame;
+    private boolean playerWon;
     private int nourishment = 100;
     private int lives = 3;
     private int darts = 50;
@@ -53,6 +54,11 @@ public class Game {
 
             if (lives == 0) {
                 gameOver();
+                break;
+            }
+
+            if (playerWon) {
+                gameWon();
                 break;
             }
         }
@@ -132,6 +138,12 @@ public class Game {
             switch (action) {
                 case ':':
                     optionsListener();
+                    break;
+                case 'e':
+                case 'E':
+                    if (player.isTouchingDoor(world, goalDoor.getPos())) {
+                        playerWon = true;
+                    }
                     break;
                 case 'w':
                 case 'W':
@@ -401,6 +413,14 @@ public class Game {
         StdDraw.pause(1000);
         playingGame = false;
         drawBigText("GAME OVER");
+        StdDraw.show();
+    }
+
+    private void gameWon() {
+        drawGUI("YOU WON!!!");
+        StdDraw.pause(1000);
+        playingGame = false;
+        drawBigText("YOU WON!!!");
         StdDraw.show();
     }
 

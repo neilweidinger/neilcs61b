@@ -12,6 +12,10 @@ public class Door {
         this.tile = Tileset.LOCKED_DOOR;
     }
 
+    public Position getPos() {
+        return this.pos;
+    }
+
     public void drawDoor(TETile[][] world) {
         world[this.pos.x][this.pos.y] = this.tile;
     }

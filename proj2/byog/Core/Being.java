@@ -25,6 +25,15 @@ public abstract class Being {
         return this.pos;
     }
 
+    public boolean isTouchingDoor(TETile[][] world, Position doorPos) {
+        if (this.pos.x == doorPos.x && this.pos.y == doorPos.y - 1) return true;
+        if (this.pos.x == doorPos.x && this.pos.y == doorPos.y + 1) return true;
+        if (this.pos.x == doorPos.x - 1 && this.pos.y == doorPos.y) return true;
+        if (this.pos.x == doorPos.x + 1 && this.pos.y == doorPos.y) return true;
+
+        return false;
+    }
+
     public static boolean isTouchingEnemy(TETile[][] world, Being being) {
         // up
         if (world[being.pos.x][being.pos.y + 1].equals(Enemy.returnEnemyTile())) {
