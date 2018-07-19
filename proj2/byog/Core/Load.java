@@ -20,7 +20,7 @@ public class Load {
         }
     }
 
-    public static void loadGame(Game game) {
+    public static void loadGame() {
         Game loadedGame = null;
 
         try {
@@ -32,8 +32,9 @@ public class Load {
             System.out.println("READ ERROR");
             System.out.println(e.getMessage());
         }
-        
-        // game = loadedGame;
-        loadedGame.playFromLoadedGame();
+
+        if (loadedGame != null) {
+            loadedGame.playFromLoadedGame();
+        }
     }
 }

@@ -132,7 +132,7 @@ public class Game implements Serializable {
                     break;
                 case 'l':
                 case 'L':
-                    Load.loadGame(this);
+                    Load.loadGame();
                     mainMenu = false;
                     break;
                 case 'n':
