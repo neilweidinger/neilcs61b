@@ -49,28 +49,21 @@ public class Game implements Serializable {
             mainMenuListener();
         }
 
-        while (playingGame) {
-            drawGUI();
-            playingGameListener();
-
-            if (lives == 0) {
-                gameOver();
-                break;
-            }
-
-            if (playerWon) {
-                gameWon();
-                break;
-            }
-        }
+        mainPlayingLoop();
     }
 
     public void playFromLoadedGame() {
+        // clear and reset everything, including user inputted keys if any
         StdDraw.clear(Color.RED);
         clearUserInput();
         resetFont();
+
         ter.renderFrame(world);
 
+        mainPlayingLoop();
+    }
+
+    private void mainPlayingLoop() {
         while (playingGame) {
             drawGUI();
             playingGameListener();
