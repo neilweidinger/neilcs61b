@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Enemy extends Being implements Serializable {
     // static variable so we can easily check Enemy tile type without calling an enemy instance
-    private static TETile tileStatic;
+    private static TETile tileStatic = Tileset.SAND;
 
     public Enemy(Position pos) {
         setPos(pos);
@@ -84,11 +84,5 @@ public class Enemy extends Being implements Serializable {
 
             if (success) break;
         }
-    }
-
-    @Override
-    protected void setTile(TETile tile) {
-        super.setTile(tile);
-        tileStatic = tile; 
     }
 }
