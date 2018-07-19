@@ -2,7 +2,9 @@ package byog.Core;
 
 import byog.TileEngine.TETile;
 
-public abstract class Being {
+import java.io.Serializable;
+
+public abstract class Being implements Serializable {
     private Position pos;
     private TETile tile;
 
@@ -97,7 +99,7 @@ public abstract class Being {
     private static boolean isInBoundsAndValidTile(TETile[][] world, Position pos) {
         return (pos.x < world.length && pos.x >= 0 &&
                 pos.y < world[0].length && pos.y >= 0 &&
-                world[pos.x][pos.y] == Room.innerTile);
+                world[pos.x][pos.y].equals(Room.innerTile));
     }
 
     @Override

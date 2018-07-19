@@ -3,7 +3,9 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-public class Door {
+import java.io.Serializable;
+
+public class Door implements Serializable {
     private Position pos;
     private TETile tile;
 

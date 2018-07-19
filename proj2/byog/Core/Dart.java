@@ -4,9 +4,11 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import edu.princeton.cs.introcs.StdDraw;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Dart {
+public class Dart implements Serializable {
     private static Position dartPos;
     private static TETile tile;
 

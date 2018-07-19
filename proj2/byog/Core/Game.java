@@ -8,8 +8,9 @@ import edu.princeton.cs.introcs.StdDraw;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Game {
+public class Game implements Serializable {
     public static TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
@@ -47,6 +48,28 @@ public class Game {
         while (mainMenu) {
             mainMenuListener();
         }
+
+        while (playingGame) {
+            drawGUI();
+            playingGameListener();
+
+            if (lives == 0) {
+                gameOver();
+                break;
+            }
+
+            if (playerWon) {
+                gameWon();
+                break;
+            }
+        }
+    }
+
+    public void playFromLoadedGame() {
+        StdDraw.clear(Color.RED);
+        clearUserInput();
+        resetFont();
+        ter.renderFrame(world);
 
         while (playingGame) {
             drawGUI();
@@ -106,6 +129,11 @@ public class Game {
                     mainMenu = false;
                     StdDraw.clear(Color.BLACK);
                     StdDraw.show();
+                    break;
+                case 'l':
+                case 'L':
+                    Load.loadGame(this);
+                    mainMenu = false;
                     break;
                 case 'n':
                 case 'N':
@@ -210,7 +238,7 @@ public class Game {
     }
 
     private void optionsListener() {
-        drawGUI("OPTIONS: [q] to quit -Press any other key to cancel");
+        drawGUI("OPTIONS: [q] to quit and save-Press any other key to cancel");
 
         while (!StdDraw.hasNextKeyTyped()) {
             // wait for second action
@@ -221,6 +249,7 @@ public class Game {
         switch (secondAction) {
             case 'q':
             case 'Q':
+                Load.saveGame(this);
                 playingGame = false;
                 StdDraw.clear(Color.BLACK);
                 StdDraw.show();

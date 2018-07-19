@@ -2,7 +2,9 @@ package byog.Core;
 
 import byog.TileEngine.Tileset;
 
-public class Player extends Being {
+import java.io.Serializable;
+
+public class Player extends Being implements Serializable {
     public Player() {
         setPos(WorldBuilder.getPlayerStart());
         setTile(Tileset.PLAYER);

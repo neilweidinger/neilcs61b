@@ -3,9 +3,10 @@ package byog.Core;
 import byog.TileEngine.Tileset;
 import byog.TileEngine.TETile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Enemy extends Being {
+public class Enemy extends Being implements Serializable {
     // static variable so we can easily check Enemy tile type without calling an enemy instance
     private static TETile tileStatic;
 
