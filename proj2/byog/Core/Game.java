@@ -8,6 +8,8 @@ import edu.princeton.cs.introcs.StdDraw;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.io.Serializable;
 
 public class Game implements Serializable {
@@ -22,7 +24,7 @@ public class Game implements Serializable {
     private boolean playingGame;
     private boolean playerWon;
     private int nourishment = 100;
-    private int lives = 1;
+    private int lives = 3;
     private int darts = 50;
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -41,14 +43,11 @@ public class Game implements Serializable {
         // draw main menu - THIS ONLY DISPLAYS THE MENU, DOESN'T REALLY DO ANYTHING
         drawMainMenu();
 
-        // set booleans to control while loops
+        // set booleans to control loops
         mainMenu = true;
         playingGame = false;
 
-        while (mainMenu) {
-            mainMenuListener();
-        }
-
+        mainMenuLoop();
         playingGameLoop();
     }
 
@@ -61,6 +60,12 @@ public class Game implements Serializable {
         ter.renderFrame(world);
 
         playingGameLoop();
+    }
+
+    private void mainMenuLoop() {
+        while (mainMenu) {
+            mainMenuListener();
+        }
     }
 
     private void playingGameLoop() {
@@ -96,16 +101,29 @@ public class Game implements Serializable {
         // drawn if the same inputs had been given to playWithKeyboard().
 
         // initialize renderer
-        ter.initialize(WIDTH, HEIGHT);
+        ter.initialize(WIDTH, HEIGHT + GUI_HEIGHT);
 
-        // initialize world
         world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
-        WorldBuilder.generateWorld(world);
 
-        // render world
-        ter.renderFrame(world);
+        // draw main menu - THIS ONLY DISPLAYS THE MENU, DOESN'T REALLY DO ANYTHING
+        drawMainMenu();
 
-        // return world array
+        // set booleans to control loops
+        mainMenu = true;
+        playingGame = false;
+
+        // // initialize queue
+        // Queue<Character> inputChars = new ArrayDeque<>();
+// 
+        // // fill in queue
+        // for (char c : input.toCharArray()) {
+            // inputChars.offer(c);
+        // }
+// 
+        // while (!inputChars.isEmpty()) {
+// 
+        // }
+
         return world;
     }
 
@@ -113,38 +131,41 @@ public class Game implements Serializable {
     private void mainMenuListener() {
         if (StdDraw.hasNextKeyTyped()) {
             char action = StdDraw.nextKeyTyped();
+            mainMenuListenerHelper(action);
+        }
+    }
 
-            switch (action) {
-                case 'q': //switch case fall through - 'q' has same effect as 'Q'
-                case 'Q':
-                    mainMenu = false;
-                    StdDraw.clear(Color.BLACK);
-                    StdDraw.show();
-                    break;
-                case 'l':
-                case 'L':
-                    Load.loadGame();
-                    mainMenu = false;
-                    break;
-                case 'n':
-                case 'N':
-                    mainMenu = false;
-                    playingGame = true;
+    private void mainMenuListenerHelper(char action) {
+        switch (action) {
+            case 'q': //switch case fall through - 'q' has same effect as 'Q'
+            case 'Q':
+                mainMenu = false;
+                StdDraw.clear(Color.BLACK);
+                StdDraw.show();
+                break;
+            case 'l':
+            case 'L':
+                Load.loadGame();
+                mainMenu = false;
+                break;
+            case 'n':
+            case 'N':
+                mainMenu = false;
+                playingGame = true;
 
-                    WorldBuilder.setSeed(askForSeed());
-                    WorldBuilder.generateWorld(world);
-                    spawnBeingsAndDoor();
-                    
-                    // reset font so that tiles are correct size before rendering world
-                    resetFont();
+                WorldBuilder.setSeed(askForSeed());
+                WorldBuilder.generateWorld(world);
+                spawnBeingsAndDoor();
 
-                    // render world
-                    ter.renderFrame(world);
+                // reset font so that tiles are correct size before rendering world
+                resetFont();
 
-                    break;
-                default:
-                    break;
-            }
+                // render world
+                ter.renderFrame(world);
+
+                break;
+            default:
+                break;
         }
     }
 
