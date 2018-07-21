@@ -22,7 +22,7 @@ public class Game implements Serializable {
     private boolean playingGame;
     private boolean playerWon;
     private int nourishment = 100;
-    private int lives = 3;
+    private int lives = 1;
     private int darts = 50;
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -68,8 +68,7 @@ public class Game implements Serializable {
             drawGUI();
             playingGameListener();
 
-            if (lives == 0) {
-                gameOver();
+            if (gameOver()) {
                 break;
             }
 
@@ -429,12 +428,17 @@ public class Game implements Serializable {
         }
     }
 
-    private void gameOver() {
-        drawGUI("GAME OVER");
-        StdDraw.pause(1000);
-        playingGame = false;
-        drawBigText("GAME OVER");
-        StdDraw.show();
+    private boolean gameOver() {
+        if (lives == 0) {
+            drawGUI("GAME OVER");
+            StdDraw.pause(1000);
+            playingGame = false;
+            drawBigText("GAME OVER");
+            StdDraw.show();
+            return true;
+        }
+
+        return false;
     }
 
     private boolean gameWon() {
