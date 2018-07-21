@@ -105,33 +105,29 @@ public class Game implements Serializable {
 
         world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
 
-
-
-
-        // CAN PROBABLY DELTE DRAWMAINMENU AND BOOLEANS
-        // draw main menu - THIS ONLY DISPLAYS THE MENU, DOESN'T REALLY DO ANYTHING
-        drawMainMenu();
-
         // set booleans to control loops
         mainMenu = true;
         playingGame = false;
 
         // initialize queue
-        Queue<Character> inputChars = new ArrayDeque<>();
+        Queue<Character> inputQueue = new ArrayDeque<>();
 
         // fill in queue
         for (char c : input.toCharArray()) {
-            inputChars.offer(c);
+            inputQueue.offer(c);
         }
 
         // stuff that happens while on the main menu
-        stringMainMenuHelper(inputChars);
+        stringMainMenu(inputQueue);
+
+        // stuff that happens while playing the game
+        stringPlayingGame(inputQueue);
 
         return world;
     }
 
-    private void stringMainMenuHelper(Queue<Character> inputChars) {
-        Character action = inputChars.poll();
+    private void stringMainMenu(Queue<Character> inputQueue) {
+        Character action = inputQueue.poll();
         if (action == null) return;
 
         switch (action) {
@@ -145,7 +141,7 @@ public class Game implements Serializable {
                 mainMenu = false;
                 playingGame = true;
 
-                WorldBuilder.setSeed(stringAskForSeed(inputChars));
+                WorldBuilder.setSeed(stringAskForSeed(inputQueue));
                 WorldBuilder.generateWorld(world);
                 spawnBeingsAndDoor();
 
@@ -199,6 +195,19 @@ public class Game implements Serializable {
                 break;
             default:
                 break;
+        }
+    }
+
+    private void stringPlayingGame(Queue<Character> inputQueue) {
+        while (!inputQueue.isEmpty()) {
+            char action = inputQueue.poll();
+
+            if (action == ':') {
+                optionsListenerHelper(inputQueue.poll());
+            }
+            else {
+                playingGameListenerHelper(action);
+            }
         }
     }
 
@@ -292,8 +301,10 @@ public class Game implements Serializable {
             // wait for second action
         }
 
-        char secondAction = StdDraw.nextKeyTyped();
+        optionsListenerHelper(StdDraw.nextKeyTyped());
+    }
 
+    private void optionsListenerHelper(char secondAction) {
         switch (secondAction) {
             case 'q':
             case 'Q':
@@ -305,15 +316,15 @@ public class Game implements Serializable {
         }
     }
 
-    private long stringAskForSeed(Queue<Character> inputChars) {
+    private long stringAskForSeed(Queue<Character> inputQueue) {
         ArrayList<Character> seed = new ArrayList<>();
 
-        Character digit = inputChars.poll();
+        Character digit = inputQueue.poll();
         if (digit == null) return -1;
 
         while (digit != 's' && digit != 'S') {
             seed.add(digit);
-            digit = inputChars.poll();
+            digit = inputQueue.poll();
         }
 
         return Long.valueOf(arrayListToString(seed));
