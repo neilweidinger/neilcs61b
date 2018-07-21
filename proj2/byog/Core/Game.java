@@ -206,80 +206,83 @@ public class Game implements Serializable {
     private void playingGameListener() {
         // if user typed in something, execute appropriate action otherwise just continue on
         if (StdDraw.hasNextKeyTyped()) {
-            char action = StdDraw.nextKeyTyped();
-
-            switch (action) {
-                case ':':
-                    optionsListener();
-                    break;
-                case 'e':
-                case 'E':
-                    if (player.isTouchingDoor(world, goalDoor.getPos())) {
-                        playerWon = true;
-                    }
-                    break;
-                case 'w':
-                case 'W':
-                    if (player.moveUp(world)) {
-                        checkForEnemyCollision();
-                    }
-                    break;
-                case 'd':
-                case 'D':
-                    if (player.moveRight(world)) {
-                        checkForEnemyCollision();
-                    }
-                    break;
-                case 's':
-                case 'S':
-                    if (player.moveDown(world)) {
-                        checkForEnemyCollision();
-                    }
-                    break;
-                case 'a':
-                case 'A':
-                    if (player.moveLeft(world)) {
-                        checkForEnemyCollision();
-                    }
-                    break;
-                case 'i':
-                case 'I':
-                    if (darts <= 0) break;
-
-                    Dart.shootUp(world, enemies, player.getPos());
-                    clearUserInput();
-                    darts--;
-
-                    break;
-                case 'l':
-                case 'L':
-                    if (darts <= 0) break;
-
-                    Dart.shootRight(world, enemies, player.getPos());
-                    clearUserInput();
-                    darts--;
-
-                    break;
-                case 'k':
-                case 'K':
-                    if (darts <= 0) break;
-
-                    Dart.shootDown(world, enemies, player.getPos());
-                    clearUserInput();
-                    darts--;
-
-                    break;
-                case 'j':
-                case 'J':
-                    if (darts <= 0) break;
-
-                    Dart.shootLeft(world, enemies, player.getPos());
-                    clearUserInput();
-                    darts--;
-
-                    break;
-            }
+            playingGameListener(StdDraw.nextKeyTyped());
         }
+    }
+
+    private void playingGameListener(char action) {
+        switch (action) {
+            case ':':
+                optionsListener();
+                break;
+            case 'e':
+            case 'E':
+                if (player.isTouchingDoor(world, goalDoor.getPos())) {
+                    playerWon = true;
+                }
+                break;
+            case 'w':
+            case 'W':
+                if (player.moveUp(world)) {
+                    checkForEnemyCollision();
+                }
+                break;
+            case 'd':
+            case 'D':
+                if (player.moveRight(world)) {
+                    checkForEnemyCollision();
+                }
+                break;
+            case 's':
+            case 'S':
+                if (player.moveDown(world)) {
+                    checkForEnemyCollision();
+                }
+                break;
+            case 'a':
+            case 'A':
+                if (player.moveLeft(world)) {
+                    checkForEnemyCollision();
+                }
+                break;
+            case 'i':
+            case 'I':
+                if (darts <= 0) break;
+
+                Dart.shootUp(world, enemies, player.getPos());
+                clearUserInput();
+                darts--;
+
+                break;
+            case 'l':
+            case 'L':
+                if (darts <= 0) break;
+
+                Dart.shootRight(world, enemies, player.getPos());
+                clearUserInput();
+                darts--;
+
+                break;
+            case 'k':
+            case 'K':
+                if (darts <= 0) break;
+
+                Dart.shootDown(world, enemies, player.getPos());
+                clearUserInput();
+                darts--;
+
+                break;
+            case 'j':
+            case 'J':
+                if (darts <= 0) break;
+
+                Dart.shootLeft(world, enemies, player.getPos());
+                clearUserInput();
+                darts--;
+
+                break;
+        }
+
     }
 
     private void optionsListener() {
