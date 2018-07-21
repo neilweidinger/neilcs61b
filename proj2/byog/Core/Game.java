@@ -49,7 +49,7 @@ public class Game implements Serializable {
             mainMenuListener();
         }
 
-        mainPlayingLoop();
+        playingGameLoop();
     }
 
     public void playFromLoadedGame() {
@@ -60,10 +60,10 @@ public class Game implements Serializable {
 
         ter.renderFrame(world);
 
-        mainPlayingLoop();
+        playingGameLoop();
     }
 
-    private void mainPlayingLoop() {
+    private void playingGameLoop() {
         while (playingGame) {
             drawGUI();
             playingGameListener();
@@ -73,8 +73,7 @@ public class Game implements Serializable {
                 break;
             }
 
-            if (playerWon) {
-                gameWon();
+            if (gameWon()) {
                 break;
             }
         }
@@ -438,12 +437,17 @@ public class Game implements Serializable {
         StdDraw.show();
     }
 
-    private void gameWon() {
-        drawGUI("YOU WON!!!");
-        StdDraw.pause(1000);
-        playingGame = false;
-        drawBigText("YOU WON!!!");
-        StdDraw.show();
+    private boolean gameWon() {
+        if (playerWon) {
+            drawGUI("YOU WON!!!");
+            StdDraw.pause(1000);
+            playingGame = false;
+            drawBigText("YOU WON!!!");
+            StdDraw.show();
+            return true;
+        }
+
+        return false;
     }
 
     private void resetFont() {

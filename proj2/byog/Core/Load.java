@@ -11,7 +11,6 @@ public class Load {
         try {
             FileOutputStream fos = new FileOutputStream("byog/Core/savedGame.ser");
             ObjectOutputStream out = new ObjectOutputStream(fos);
-
             out.writeObject(game);
         }
         catch (IOException e) {
