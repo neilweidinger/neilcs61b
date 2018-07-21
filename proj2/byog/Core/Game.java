@@ -96,18 +96,10 @@ public class Game implements Serializable {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
-        // and return a 2D tile representation of the world that would have been
-        // drawn if the same inputs had been given to playWithKeyboard().
-
         // initialize renderer
         ter.initialize(WIDTH, HEIGHT + GUI_HEIGHT);
 
         world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
-
-        // set booleans to control loops
-        mainMenu = true;
-        playingGame = false;
 
         // initialize queue
         Queue<Character> inputQueue = new ArrayDeque<>();
@@ -117,10 +109,7 @@ public class Game implements Serializable {
             inputQueue.offer(c);
         }
 
-        // stuff that happens while on the main menu
         stringMainMenu(inputQueue);
-
-        // stuff that happens while playing the game
         stringPlayingGame(inputQueue);
 
         return world;
@@ -198,6 +187,9 @@ public class Game implements Serializable {
         }
     }
 
+    // this method is needed because if we just used playingGameListenerHelper, if the user entered ':' then it would
+    // be weird and annoying to poll the secondAction (bc user called option menu) within playingGameListenerHelper
+    // which is also used in playByKeyboard
     private void stringPlayingGame(Queue<Character> inputQueue) {
         while (!inputQueue.isEmpty()) {
             char action = inputQueue.poll();
