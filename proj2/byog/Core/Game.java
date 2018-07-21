@@ -105,6 +105,10 @@ public class Game implements Serializable {
 
         world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
 
+
+
+
+        // CAN PROBABLY DELTE DRAWMAINMENU AND BOOLEANS
         // draw main menu - THIS ONLY DISPLAYS THE MENU, DOESN'T REALLY DO ANYTHING
         drawMainMenu();
 
@@ -112,32 +116,61 @@ public class Game implements Serializable {
         mainMenu = true;
         playingGame = false;
 
-        // // initialize queue
-        // Queue<Character> inputChars = new ArrayDeque<>();
-// 
-        // // fill in queue
-        // for (char c : input.toCharArray()) {
-            // inputChars.offer(c);
-        // }
-// 
-        // while (!inputChars.isEmpty()) {
-// 
-        // }
+        // initialize queue
+        Queue<Character> inputChars = new ArrayDeque<>();
+
+        // fill in queue
+        for (char c : input.toCharArray()) {
+            inputChars.offer(c);
+        }
+
+        // stuff that happens while on the main menu
+        stringMainMenuHelper(inputChars);
 
         return world;
+    }
+
+    private void stringMainMenuHelper(Queue<Character> inputChars) {
+        Character action = inputChars.poll();
+        if (action == null) return;
+
+        switch (action) {
+            case 'q': // switch case fall through - 'q' has same effect as 'Q'
+            case 'Q':
+            case 'l':
+            case 'L':
+                mainMenuListenerHelper(action); // the same regardless if playByString or not
+            case 'n':
+            case 'N':
+                mainMenu = false;
+                playingGame = true;
+
+                WorldBuilder.setSeed(stringAskForSeed(inputChars));
+                WorldBuilder.generateWorld(world);
+                spawnBeingsAndDoor();
+
+                // reset font so that tiles are correct size before rendering world
+                resetFont();
+
+                // render world
+                ter.renderFrame(world);
+
+                break;
+            default:
+                break;
+        }
     }
 
     // listen for user input while on main menu
     private void mainMenuListener() {
         if (StdDraw.hasNextKeyTyped()) {
-            char action = StdDraw.nextKeyTyped();
-            mainMenuListenerHelper(action);
+            mainMenuListenerHelper(StdDraw.nextKeyTyped());
         }
     }
 
     private void mainMenuListenerHelper(char action) {
         switch (action) {
-            case 'q': //switch case fall through - 'q' has same effect as 'Q'
+            case 'q': // switch case fall through - 'q' has same effect as 'Q'
             case 'Q':
                 mainMenu = false;
                 StdDraw.clear(Color.BLACK);
@@ -267,6 +300,20 @@ public class Game implements Serializable {
                 StdDraw.show();
                 break;
         }
+    }
+
+    private long stringAskForSeed(Queue<Character> inputChars) {
+        ArrayList<Character> seed = new ArrayList<>();
+
+        Character digit = inputChars.poll();
+        if (digit == null) return -1;
+
+        while (digit != 's' && digit != 'S') {
+            seed.add(digit);
+            digit = inputChars.poll();
+        }
+
+        return Long.valueOf(arrayListToString(seed));
     }
 
     // returns user inputted seed as a long, sanitized so that seed is valid
@@ -473,6 +520,16 @@ public class Game implements Serializable {
         }
 
         return false;
+    }
+
+    private String arrayListToString(ArrayList<Character> list) {
+        StringBuilder builder = new StringBuilder();
+
+        for (Character item : list) {
+            builder.append(String.valueOf(item));
+        }
+
+        return builder.toString();
     }
 
     private void resetFont() {
