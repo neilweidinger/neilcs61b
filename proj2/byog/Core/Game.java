@@ -206,11 +206,11 @@ public class Game implements Serializable {
     private void playingGameListener() {
         // if user typed in something, execute appropriate action otherwise just continue on
         if (StdDraw.hasNextKeyTyped()) {
-            playingGameListener(StdDraw.nextKeyTyped());
+            playingGameListenerHelper(StdDraw.nextKeyTyped());
         }
     }
 
-    private void playingGameListener(char action) {
+    private void playingGameListenerHelper(char action) {
         switch (action) {
             case ':':
                 optionsListener();
