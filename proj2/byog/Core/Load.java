@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.util.Queue;
 
 public class Load {
     public static void saveGame(Game game) {
@@ -20,6 +21,15 @@ public class Load {
     }
 
     public static void loadGame() {
+        loadGameHelper().playFromLoadedGame();
+    }
+
+    public static void stringLoadGame(Queue<Character> inputQueue) {
+        loadGameHelper().stringPlayFromLoadedGame(inputQueue);
+    }
+
+    // returns a Game object that has been loaded in from a save file
+    private static Game loadGameHelper() {
         Game loadedGame = null;
 
         try {
@@ -32,8 +42,6 @@ public class Load {
             System.out.println(e.getMessage());
         }
 
-        if (loadedGame != null) {
-            loadedGame.playFromLoadedGame();
-        }
+        return loadedGame;
     }
 }

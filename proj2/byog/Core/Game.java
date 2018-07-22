@@ -35,9 +35,7 @@ public class Game implements Serializable {
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
-        // initialize renderer
-        ter.initialize(WIDTH, HEIGHT + GUI_HEIGHT);
-
+        ter.initialize(WIDTH, HEIGHT + GUI_HEIGHT); // initialize renderer
         world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
 
         // draw main menu - THIS ONLY DISPLAYS THE MENU, DOESN'T REALLY DO ANYTHING
@@ -48,17 +46,6 @@ public class Game implements Serializable {
         playingGame = false;
 
         mainMenuLoop();
-        playingGameLoop();
-    }
-
-    public void playFromLoadedGame() {
-        // clear and reset everything, including user inputted keys if any
-        StdDraw.clear(Color.RED);
-        clearUserInput();
-        resetFont();
-
-        ter.renderFrame(world);
-
         playingGameLoop();
     }
 
@@ -96,18 +83,9 @@ public class Game implements Serializable {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // initialize renderer
-        ter.initialize(WIDTH, HEIGHT + GUI_HEIGHT);
-
+        ter.initialize(WIDTH, HEIGHT + GUI_HEIGHT); // initialize renderer
         world = WorldBuilder.initializeWorld(WIDTH, HEIGHT);
-
-        // initialize queue
-        Queue<Character> inputQueue = new ArrayDeque<>();
-
-        // fill in queue
-        for (char c : input.toCharArray()) {
-            inputQueue.offer(c);
-        }
+        Queue<Character> inputQueue = stringInitializeQueue(input);
 
         stringMainMenu(inputQueue);
         stringPlayingGame(inputQueue);
@@ -115,21 +93,33 @@ public class Game implements Serializable {
         return world;
     }
 
+    public void playFromLoadedGame() {
+        // clear and reset everything, including user inputted keys if any
+        StdDraw.clear(Color.RED);
+        clearUserInput();
+        resetFont();
+
+        ter.renderFrame(world);
+
+        playingGameLoop();
+    }
+
+    public void stringPlayFromLoadedGame(Queue<Character> inputQueue) {
+        stringPlayingGame(inputQueue);
+    }
+
     private void stringMainMenu(Queue<Character> inputQueue) {
         Character action = inputQueue.poll();
         if (action == null) return;
 
         switch (action) {
-            case 'q': // switch case fall through - 'q' has same effect as 'Q'
-            case 'Q':
             case 'l':
             case 'L':
-                mainMenuListenerHelper(action); // the same regardless if playByString or not
+                Load.stringLoadGame(inputQueue);
+                mainMenu = false;
+                break;
             case 'n':
             case 'N':
-                mainMenu = false;
-                playingGame = true;
-
                 WorldBuilder.setSeed(stringAskForSeed(inputQueue));
                 WorldBuilder.generateWorld(world);
                 spawnBeingsAndDoor();
@@ -142,6 +132,7 @@ public class Game implements Serializable {
 
                 break;
             default:
+                mainMenuListenerHelper(action); // the same regardless if playByString or not
                 break;
         }
     }
@@ -194,11 +185,11 @@ public class Game implements Serializable {
         while (!inputQueue.isEmpty()) {
             char action = inputQueue.poll();
 
-            if (action == ':') {
-                optionsListenerHelper(inputQueue.poll());
-            }
-            else {
-                playingGameListenerHelper(action);
+            switch (action) {
+                case ':':
+                    optionsListenerHelper(inputQueue.poll());
+                default:
+                    playingGameListenerHelper(action);
             }
         }
     }
@@ -283,7 +274,6 @@ public class Game implements Serializable {
 
                 break;
         }
-
     }
 
     private void optionsListener() {
@@ -304,6 +294,8 @@ public class Game implements Serializable {
                 playingGame = false;
                 StdDraw.clear(Color.BLACK);
                 StdDraw.show();
+                break;
+            default:
                 break;
         }
     }
@@ -536,6 +528,17 @@ public class Game implements Serializable {
         }
 
         return builder.toString();
+    }
+
+    private Queue<Character> stringInitializeQueue(String input) {
+        Queue<Character> inputQueue = new ArrayDeque<>();
+
+        // fill in queue
+        for (char c : input.toCharArray()) {
+            inputQueue.offer(c);
+        }
+
+        return inputQueue;
     }
 
     private void resetFont() {
