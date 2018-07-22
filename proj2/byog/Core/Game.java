@@ -105,6 +105,8 @@ public class Game implements Serializable {
     }
 
     public void stringPlayFromLoadedGame(Queue<Character> inputQueue) {
+        // just in case user only enetered 'l' (render would never be called again)
+        ter.renderFrame(world);
         stringPlayingGame(inputQueue);
     }
 
