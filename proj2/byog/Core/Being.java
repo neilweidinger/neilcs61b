@@ -27,7 +27,7 @@ public abstract class Being implements Serializable {
         return this.pos;
     }
 
-    public boolean isTouchingDoor(TETile[][] world, Position doorPos) {
+    public boolean isTouchingDoor(Position doorPos) {
         if (this.pos.x == doorPos.x && this.pos.y == doorPos.y - 1) return true;
         if (this.pos.x == doorPos.x && this.pos.y == doorPos.y + 1) return true;
         if (this.pos.x == doorPos.x - 1 && this.pos.y == doorPos.y) return true;

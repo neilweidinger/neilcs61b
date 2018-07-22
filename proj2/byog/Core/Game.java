@@ -183,13 +183,16 @@ public class Game implements Serializable {
     // which is also used in playByKeyboard
     private void stringPlayingGame(Queue<Character> inputQueue) {
         while (!inputQueue.isEmpty()) {
-            char action = inputQueue.poll();
+            Character action = inputQueue.poll();
+            if (action == null) return;
 
             switch (action) {
                 case ':':
                     optionsListenerHelper(inputQueue.poll());
+                    break;
                 default:
                     playingGameListenerHelper(action);
+                    break;
             }
         }
     }
@@ -209,7 +212,7 @@ public class Game implements Serializable {
                 break;
             case 'e':
             case 'E':
-                if (player.isTouchingDoor(world, goalDoor.getPos())) {
+                if (player.isTouchingDoor(goalDoor.getPos())) {
                     playerWon = true;
                 }
                 break;
@@ -304,9 +307,8 @@ public class Game implements Serializable {
         ArrayList<Character> seed = new ArrayList<>();
 
         Character digit = inputQueue.poll();
-        if (digit == null) return -1;
 
-        while (digit != 's' && digit != 'S') {
+        while (digit != null && digit != 's' && digit != 'S') {
             seed.add(digit);
             digit = inputQueue.poll();
         }
