@@ -104,20 +104,21 @@ public class Game implements Serializable {
         playingGameLoop();
     }
 
-    public void stringPlayFromLoadedGame(Queue<Character> inputQueue) {
+    public TETile[][] stringPlayFromLoadedGame(Queue<Character> inputQueue) {
         // just in case user only enetered 'l' (render would never be called again)
         ter.renderFrame(world);
         stringPlayingGame(inputQueue);
+        return world;
     }
 
-    private void stringMainMenu(Queue<Character> inputQueue) {
+    private TETile[][] stringMainMenu(Queue<Character> inputQueue) {
         Character action = inputQueue.poll();
-        if (action == null) return;
+        if (action == null) action = '0'; // make sure null action doesn't do anything
 
         switch (action) {
             case 'l':
             case 'L':
-                Load.stringLoadGame(inputQueue);
+                world = Load.stringLoadGame(inputQueue);
                 mainMenu = false;
                 break;
             case 'n':
@@ -137,6 +138,8 @@ public class Game implements Serializable {
                 mainMenuListenerHelper(action); // the same regardless if playByString or not
                 break;
         }
+
+        return world;
     }
 
     // listen for user input while on main menu

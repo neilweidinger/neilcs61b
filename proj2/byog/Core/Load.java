@@ -1,5 +1,7 @@
 package byog.Core;
 
+import byog.TileEngine.TETile;
+
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
@@ -24,8 +26,8 @@ public class Load {
         loadGameHelper().playFromLoadedGame();
     }
 
-    public static void stringLoadGame(Queue<Character> inputQueue) {
-        loadGameHelper().stringPlayFromLoadedGame(inputQueue);
+    public static TETile[][] stringLoadGame(Queue<Character> inputQueue) {
+        return loadGameHelper().stringPlayFromLoadedGame(inputQueue);
     }
 
     // returns a Game object that has been loaded in from a save file
