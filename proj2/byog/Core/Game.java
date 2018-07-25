@@ -2,7 +2,6 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
-import byog.TileEngine.Tileset;
 
 import edu.princeton.cs.introcs.StdDraw;
 import java.awt.Color;
@@ -105,13 +104,13 @@ public class Game implements Serializable {
     }
 
     public TETile[][] stringPlayFromLoadedGame(Queue<Character> inputQueue) {
-        // just in case user only enetered 'l' (render would never be called again)
+        // just in case user only entered 'l' (render would never be called again)
         ter.renderFrame(world);
         stringPlayingGame(inputQueue);
         return world;
     }
 
-    private TETile[][] stringMainMenu(Queue<Character> inputQueue) {
+    private void stringMainMenu(Queue<Character> inputQueue) {
         Character action = inputQueue.poll();
         if (action == null) action = '0'; // make sure null action doesn't do anything
 
@@ -138,8 +137,6 @@ public class Game implements Serializable {
                 mainMenuListenerHelper(action); // the same regardless if playByString or not
                 break;
         }
-
-        return world;
     }
 
     // listen for user input while on main menu
